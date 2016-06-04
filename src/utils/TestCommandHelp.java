@@ -1,6 +1,7 @@
 package utils;
 
 public class TestCommandHelp {
+	
 	public static String generateRandoopTestCases(
 			String targetLibrary,
 			String classList,
@@ -27,4 +28,33 @@ public class TestCommandHelp {
 		String result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
+	
+	public static String generateEvosuiteTestCases(
+			String targetLibrary,
+			String classList,
+			int seed,
+			int timeLimit,
+			String outputDir,
+			String workingPath) {
+		
+		String[] commands = {
+				"java",
+				"-cp",
+				"./lib/evosuite-1.0.3.jar",
+				"-target",
+				"./targets/" + targetLibrary,
+				"-generateSuite",
+				"-seed",
+				"" + seed,
+				"-Dsearch_budget=" + timeLimit,
+				"-Dstopping_condition=MaxTime"
+		};
+		
+		ExecCommand executor = new ExecCommand();
+		String result = executor.execOneThread(commands, workingPath);
+		return result;
+	}
+	
+	
+	
 }
