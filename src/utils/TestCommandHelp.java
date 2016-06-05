@@ -40,7 +40,7 @@ public class TestCommandHelp {
 		
 		String[] commands = {
 				"java",
-				"-cp",
+				"-jar",
 				"./lib/evosuite-1.0.3.jar",
 				"-generateSuite",
 				"-class",
@@ -68,7 +68,7 @@ public class TestCommandHelp {
 		
 		String[] commands = {
 				"java",
-				"-cp",
+				"-jar",
 				"./lib/evosuite-1.0.3.jar",
 				"-target",
 				"./targets/" + targetLibrary,
