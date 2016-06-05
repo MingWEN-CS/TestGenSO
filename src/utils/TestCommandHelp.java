@@ -29,7 +29,36 @@ public class TestCommandHelp {
 		return result;
 	}
 	
-	public static String generateEvosuiteTestCases(
+	public static String generateEvosuiteTestCasesForAClass(
+			String targetLibrary,
+			String className,
+			int seed,
+			int timeLimit,
+			String outputDir,
+			String workingPath
+			) {
+		
+		String[] commands = {
+				"java",
+				"-cp",
+				"./lib/evosuite-1.0.3.jar",
+				"-generateSuite",
+				"-class",
+				className,
+				"-projectCP",
+				"./target/" + targetLibrary,
+				"-seed",
+				"" + seed,
+				"-Dsearch_budget=" + timeLimit,
+				"Dstopping_condition=MaxTime"
+		};
+		
+		ExecCommand executor = new ExecCommand();
+		String result = executor.execOneThread(commands, workingPath);
+		return result;
+	}
+	
+	public static String generateEvosuiteTestCasesForALibrary(
 			String targetLibrary,
 			String classList,
 			int seed,
@@ -55,6 +84,13 @@ public class TestCommandHelp {
 		return result;
 	}
 	
-	
-	
+	public static void main(String[] args) {
+		String targetLibrary = "commons-math3-3.6.1.jar";
+		String className = "org.apache.commons.math3.optim.SimplePointChecker";
+		int seed = 0;
+		int timeLimit = 10;
+		String outputDir = "";
+		String workingPath = ".";
+		generateEvosuiteTestCasesForAClass(targetLibrary, className, seed, timeLimit, outputDir, workingPath);
+	}
 }
