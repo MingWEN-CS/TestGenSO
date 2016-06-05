@@ -2,6 +2,14 @@ package utils;
 
 public class TestCommandHelp {
 	
+	private static void printCommands(String[] commands) {
+		for (String command : commands) {
+			System.out.print(command + " ");
+		}
+		System.out.println();
+	} 
+	
+	
 	public static String generateRandoopTestCases(
 			String targetLibrary,
 			String classList,
@@ -46,14 +54,15 @@ public class TestCommandHelp {
 				"-class",
 				className,
 				"-projectCP",
-				"./target/" + targetLibrary,
+				"./targets/" + targetLibrary,
 				"-seed",
 				"" + seed,
 				"-Dsearch_budget=" + timeLimit,
-				"Dstopping_condition=MaxTime"
+				"-Dstopping_condition=MaxTime"
 		};
 		
 		ExecCommand executor = new ExecCommand();
+		printCommands(commands);
 		String result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
