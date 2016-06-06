@@ -13,7 +13,7 @@ public class TestCommandHelp {
 	public static String generatePiTestMutationTest(
 			String[] dependancies,
 			String reportDir,
-			String sourceDirs,
+			String sourceDir,
 			String targetClasses,
 			String targetTests,
 			String workingPath
@@ -36,7 +36,7 @@ public class TestCommandHelp {
 				"--reportDir",
 				reportDir,
 				"--sourceDirs",
-				sourceDirs,
+				sourceDir,
 				"--targetClasses",
 				targetClasses,
 				"--mutations ALL",
