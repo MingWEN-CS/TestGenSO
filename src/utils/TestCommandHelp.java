@@ -97,11 +97,12 @@ public class TestCommandHelp {
 	public static void main(String[] args) {
 		String targetLibrary = "commons-math3-3.6.1.jar";
 		String className = "org.apache.commons.math3.dfp.DfpField";
+		String classList = "classnames.txt";
 		int seed = 0;
 		int timeLimit = 10;
 		String outputDir = "./randoop-tests";
 		String workingPath = ".";
 //		generateEvosuiteTestCasesForAClass(targetLibrary, className, seed, timeLimit, outputDir, workingPath);
-		generateRandoopTestCases(targetLibrary,className, seed , timeLimit,outputDir, workingPath);
+		generateRandoopTestCases(targetLibrary, classList, seed , timeLimit,outputDir, workingPath);
 	}
 }
