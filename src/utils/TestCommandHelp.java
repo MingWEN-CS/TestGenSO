@@ -10,6 +10,46 @@ public class TestCommandHelp {
 	} 
 	
 	
+	public static String generatePiTestMutationTest(
+			String[] dependancies,
+			String reportDir,
+			String sourceDirs,
+			String targetClasses,
+			String targetTests,
+			String workingPath
+			) {
+		
+		
+		// required pitest libraries
+		String classPath = "./lib/pitest-command-line-1.1.10.jar:./lib/junit-4.12.jar:./lib/pitest-1.1.10.jar";
+		
+		// path for the classes under testing and its dependencies
+		for (String dependancy : dependancies) {
+			classPath += ":" + dependancy;
+		}
+		
+		String[] commands = {
+				"java",
+				"-cp",
+				classPath,
+				"org.pitest.mutationtest.commandline.MutationCoverageReport",
+				"--reportDir",
+				reportDir,
+				"--sourceDirs",
+				sourceDirs,
+				"--targetClasses",
+				targetClasses,
+				"--mutations ALL",
+				"--targetTests",
+				targetTests
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		String result = executor.execOneThread(commands, workingPath);
+		return result;
+	}
+	
 	public static String generateRandoopTestCases(
 			String targetLibrary,
 			String classList,
@@ -92,6 +132,8 @@ public class TestCommandHelp {
 		String result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		String targetLibrary = "commons-math3-3.6.1.jar";
