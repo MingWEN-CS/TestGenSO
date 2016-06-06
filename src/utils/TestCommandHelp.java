@@ -95,7 +95,7 @@ public class TestCommandHelp {
 	
 	public static void main(String[] args) {
 		String targetLibrary = "commons-math3-3.6.1.jar";
-		String className = "org.apache.commons.math3.optim.SimplePointChecker";
+		String className = "org.apache.commons.math3.dfp.DfpField";
 		int seed = 0;
 		int timeLimit = 10;
 		String outputDir = "";
