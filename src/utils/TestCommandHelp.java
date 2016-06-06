@@ -32,6 +32,7 @@ public class TestCommandHelp {
 				"timeLimit=" + timeLimit
 		};
 		
+		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		String result = executor.execOneThread(commands, workingPath);
 		return result;
@@ -98,8 +99,9 @@ public class TestCommandHelp {
 		String className = "org.apache.commons.math3.dfp.DfpField";
 		int seed = 0;
 		int timeLimit = 10;
-		String outputDir = "";
+		String outputDir = "./randoop-tests";
 		String workingPath = ".";
-		generateEvosuiteTestCasesForAClass(targetLibrary, className, seed, timeLimit, outputDir, workingPath);
+//		generateEvosuiteTestCasesForAClass(targetLibrary, className, seed, timeLimit, outputDir, workingPath);
+		generateRandoopTestCases(targetLibrary,className, seed , timeLimit,outputDir, workingPath);
 	}
 }
