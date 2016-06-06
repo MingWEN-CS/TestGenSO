@@ -27,8 +27,8 @@ public class TestCommandHelp {
 				"--classlist=" + classList,
 				"--ignore-flaky-tests=true",
 				"--junit-output-dir=" + outputDir,
-				"--seed=" + seed,
-				"timeLimit=" + timeLimit
+				"--randomseed=" + seed,
+				"--timelimit=" + timeLimit
 		};
 		
 		printCommands(commands);
