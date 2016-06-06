@@ -50,6 +50,28 @@ public class TestCommandHelp {
 		return result;
 	}
 	
+	
+	public static String compileJUnitTestCases(
+			String targetLibrary,
+			String testDir,
+			String testPath,
+			String workingPath) {
+		
+		String[] commands = {
+				"javac",
+				"-cp",
+				"./lib/junit-4.12.jar:./targets/" + targetLibrary + ":" + testDir,
+				"testPath"
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		String result = executor.execOneThread(commands, workingPath);
+		return result;
+	}
+	
+	
+	
 	public static String generateRandoopTestCases(
 			String targetLibrary,
 			String classList,
