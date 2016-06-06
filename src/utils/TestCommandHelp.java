@@ -21,7 +21,7 @@ public class TestCommandHelp {
 		
 		
 		// required pitest libraries
-		String classPath = "./lib/pitest-command-line-1.1.10.jar:./lib/junit-4.12.jar:./lib/pitest-1.1.10.jar";
+		String classPath = "./lib/pitest-command-line-1.1.10.jar:./lib/junit-4.12.jar:./lib/pitest-1.1.10.jar:./lib/hamcrest-all-1.3.jar";
 		
 		// path for the classes under testing and its dependencies
 		for (String dependancy : dependancies) {
