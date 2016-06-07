@@ -39,7 +39,8 @@ public class TestCommandHelp {
 				sourceDir,
 				"--targetClasses",
 				targetClasses,
-				"--mutators ALL",
+				"--mutators",
+				"ALL",
 				"--targetTests",
 				targetTests
 		};
