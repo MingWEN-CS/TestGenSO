@@ -1,7 +1,9 @@
 package tasks;
 
 import java.io.File;
+import java.util.List;
 
+import utils.FileListUnderDirectory;
 import utils.TestCommandHelp;
 
 public class EvaluateTestCases {
@@ -32,13 +34,10 @@ public class EvaluateTestCases {
 			"./evosuite-tests/"
 		};
 		
-		File file = new File("./evosuite-tests/");
-		File[] testFiles = file.listFiles();
-		for (File testFile : testFiles) {
+		List<String> files = FileListUnderDirectory.getFileListUnder("./evosuite-tests/","ESTest.java");
+		for (String testFile : files) {
 			System.out.println(testFile);
-			if (!testFile.getName().endsWith("ESTest.java")) continue;
-			String absolutePath = testFile.getAbsolutePath();
-			String relativePath = absolutePath.substring(absolutePath.indexOf("evosuite-tests") + 15);
+			String relativePath = testFile.substring(testFile.indexOf("evosuite-tests") + 15);
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, "./evosuite-tests/", dependancies, relativePath, ".");
 		}
 		
