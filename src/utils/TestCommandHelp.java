@@ -47,6 +47,7 @@ public class TestCommandHelp {
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		String result = executor.execOneThread(commands, workingPath);
+		System.out.println(result);
 		return result;
 	}
 	
