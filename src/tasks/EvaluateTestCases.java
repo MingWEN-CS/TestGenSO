@@ -56,7 +56,7 @@ public class EvaluateTestCases {
 		String reportDir = "./report";
 		String sourceDir = ".";
 		String targetClasses = "org.apache.commons.math3.*";
-		String targetTests = "org.apache.commons.math3.*ESTest.java";
+		String targetTests = "org.apache.commons.math3.*ESTest";
 		String workingPath = ".";
 		
 		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
