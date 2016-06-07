@@ -37,7 +37,7 @@ public class EvaluateTestCases {
 		List<String> files = FileListUnderDirectory.getFileListUnder("./evosuite-tests/","ESTest.java");
 		for (String testFile : files) {
 			System.out.println(testFile);
-			String relativePath = testFile.substring(testFile.indexOf("evosuite-tests") + 15);
+			String relativePath = testFile.substring(testFile.indexOf("evosuite-tests"));
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, "./evosuite-tests/", dependancies, relativePath, ".");
 		}
 		
