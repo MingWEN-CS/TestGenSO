@@ -29,7 +29,13 @@ public class EvaluateTestCases {
 	public void getEvosuiteCoverage() {
 		String targetLibrary = "commons-math3-3.6.1";
 		
+		/*
+		 * Compile JUnit Test Cases
+		 * */
+		System.out.println("Compiling JUnit Test Cases...");
+		
 		String[] dependancies = {
+			"./targets/" + targetLibrary,
 			"./lib/evosuite-standalone-runtime-1.0.3.jar",
 			"./evosuite-tests/"
 		};
@@ -41,6 +47,19 @@ public class EvaluateTestCases {
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, "./evosuite-tests/", dependancies, relativePath, ".");
 		}
 		
+		/*
+		 * Evaluate the test cases using PiTest
+		 * */
+		
+		System.out.println("Runinng PiTest on Evosuite Test Cases...");
+		
+		String reportDir = "./report";
+		String sourceDir = ".";
+		String targetClasses = "org.apache.commons.math3.*";
+		String targetTests = "org.apache.commons.math3.*ESTest.java";
+		String workingPath = ".";
+		
+		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
 	}
 	
 	public static void main(String[] args) {

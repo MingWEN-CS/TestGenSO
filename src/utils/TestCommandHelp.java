@@ -68,7 +68,7 @@ public class TestCommandHelp {
 		String[] commands = {
 				"javac",
 				"-cp",
-				"./lib/junit-4.12.jar:./targets/" + targetLibrary + requiredFiles,
+				"./lib/junit-4.12.jar" + requiredFiles,
 				testPath
 		};
 		
