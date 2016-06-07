@@ -35,6 +35,7 @@ public class EvaluateTestCases {
 		File file = new File("./evosuite-tests/");
 		File[] testFiles = file.listFiles();
 		for (File testFile : testFiles) {
+			System.out.println(testFile);
 			if (!testFile.getName().endsWith("ESTest.java")) continue;
 			String absolutePath = testFile.getAbsolutePath();
 			String relativePath = absolutePath.substring(absolutePath.indexOf("evosuite-tests") + 15);
