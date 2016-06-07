@@ -56,13 +56,19 @@ public class TestCommandHelp {
 	public static String compileJUnitTestCases(
 			String targetLibrary,
 			String testDir,
+			String[] dependancies,
 			String testPath,
 			String workingPath) {
+		
+		String requiredFiles = "";
+		for (String dependancy : dependancies) {
+			requiredFiles += ":" + dependancy;
+		}
 		
 		String[] commands = {
 				"javac",
 				"-cp",
-				"./lib/junit-4.12.jar:./targets/" + targetLibrary + ":" + testDir,
+				"./lib/junit-4.12.jar:./targets/" + targetLibrary + requiredFiles,
 				testPath
 		};
 		
