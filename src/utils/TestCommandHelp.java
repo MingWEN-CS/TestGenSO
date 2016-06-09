@@ -188,8 +188,8 @@ public class TestCommandHelp {
 		String className = "org.apache.commons.math3.dfp.DfpField";
 		String classList = "classnames.txt";
 		int seed = 0;
-		int timeLimit = 10;
-		String outputDir = "./randoop-tests";
+		int timeLimit = 180;
+		String outputDir = "./randoop-tests-180";
 		String workingPath = ".";
 //		generateEvosuiteTestCasesForAClass(targetLibrary, className, seed, timeLimit, outputDir, workingPath);
 		generateRandoopTestCases(targetLibrary, classList, seed , timeLimit,outputDir, workingPath);
