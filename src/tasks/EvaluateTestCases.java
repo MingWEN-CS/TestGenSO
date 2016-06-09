@@ -1,6 +1,6 @@
 package tasks;
 
-import java.io.File;
+
 import java.util.List;
 
 import utils.FileListUnderDirectory;
@@ -10,13 +10,24 @@ public class EvaluateTestCases {
 	
 	public void getRandoopCoverage() {
 		String targetLibrary = "commons-math3-3.6.1";
+		String testCaseDir = "./randoop-tests2";
 		
 		String[] dependancies = {
-			"./randoop-tests",
+			testCaseDir,
 			"./targets/" + targetLibrary
 		};
 		
-		String reportDir = "./report";
+		System.out.println("Compiling JUnit Test Cases...");
+		
+		List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
+		for (String testFile : files) {
+			
+			String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
+			System.out.println(relativePath);
+			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+		}
+		
+		String reportDir = "./report-randoop";
 		String sourceDir = ".";
 		String targetClasses = "org.apache.commons.math3.*";
 		String targetTests = "RegressionTest*";
@@ -24,6 +35,7 @@ public class EvaluateTestCases {
 		
 		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
 	}
+	
 	
 	
 	public void getEvosuiteCoverage() {
@@ -64,6 +76,6 @@ public class EvaluateTestCases {
 	
 	public static void main(String[] args) {
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		etc.getEvosuiteCoverage();
+		etc.getRandoopCoverage();
 	}
 }
