@@ -10,7 +10,7 @@ public class EvaluateTestCases {
 	
 	public void getRandoopCoverage() {
 		String targetLibrary = "commons-math3-3.6.1";
-		String testCaseDir = "./randoop-tests2";
+		String testCaseDir = "./randoop-tests-180";
 		
 		String[] dependancies = {
 			testCaseDir,
