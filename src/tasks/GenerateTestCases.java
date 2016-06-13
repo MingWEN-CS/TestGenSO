@@ -2,6 +2,7 @@ package tasks;
 
 import java.io.File;
 
+import config.ParsingArguments;
 import utils.TestCommandHelp;
 
 public class GenerateTestCases {
@@ -28,12 +29,13 @@ public class GenerateTestCases {
 			file = new File(outputDir);
 			if (!file.exists())
 				file.mkdir();
-			System.out.println("== Generating Randoop test cases with seed: " + seed + "==");
+			System.out.println("== Generating Randoop test cases with seed:" + seed + " ==");
 			TestCommandHelp.generateRandoopTestCases(targetLibraryAndDependancy, classlist, seed, timeLimit, outputDir, workingPath);
 		}
 	}
 	
 	public static void main(String[] args) {
+		ParsingArguments.parsingArguments(args);
 		generateRandoopTestCases();
 	}
 }
