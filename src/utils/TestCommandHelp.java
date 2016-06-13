@@ -117,7 +117,7 @@ public class TestCommandHelp {
 		String[] commands = {
 				"java",
 				"-cp",
-				"./lib/randoop-2.1.4.jar:targetLibraryAndDependancy",
+				"./lib/randoop-2.1.4.jar:" + targetLibraryAndDependancy,
 				"randoop.main.Main",
 				"gentests",
 				"--classlist=" + classList,
