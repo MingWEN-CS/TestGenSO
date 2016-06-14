@@ -40,7 +40,7 @@ public class EvaluateTestCases {
 		List<Integer> commentPoint = new ArrayList<Integer>();
 		for (int num : nums) {
 			int current = num;
-			while (!lines.get(current).equals("@Test")) current--;
+			while (!lines.get(current).trim().equals("@Test")) current--;
 			commentPoint.add(current);
 		}
 		
