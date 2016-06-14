@@ -19,7 +19,15 @@ public class EvaluateTestCases {
 		System.out.println("== get compiling errors == ");
 		System.out.println(results);
 		System.out.println("== end compiling errors == ");
-		
+		results = results.trim();
+		if (results.endsWith("errors")) {
+			int index = results.indexOf(relativePath);
+			String line = results.substring(index + relativePath.length() + 1, results.indexOf(":",index + relativePath.length() + 1));
+			System.out.println(line);
+			while (index >= 0) {
+				index = results.indexOf(relativePath, index + 1);
+			}
+		}
 		return lineNumbers;
 	}
 	
