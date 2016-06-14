@@ -28,6 +28,7 @@ public class EvaluateTestCases {
 		String[] dependancies = {targetLibraryAndDependancy};
 		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
+		
 		for (int seed = 0; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
@@ -38,8 +39,11 @@ public class EvaluateTestCases {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				System.out.println(relativePath);
 				TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
-			}
-			
+			}	
+		}
+		
+		for (int seed = 0; seed < 10; seed++) {
+
 			String reportDir = reportDirPrefix + "-report-" + seed;
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
@@ -48,7 +52,6 @@ public class EvaluateTestCases {
 			Runnable work = new runPiTestRandoopPerSeed(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath, seed);
 			executor.execute(work);
 		}
-		
 		executor.shutdown();
 	}
 	
@@ -120,7 +123,7 @@ class runPiTestRandoopPerSeed implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		long threadId = Thread.currentThread().getId();
-		System.out.println("== Thread: " + threadId + "Generating Randoop test cases with seed:" + seed + " ==");
+		System.out.println("== Thread: " + threadId + "Evaluating Randoop test cases with seed:" + seed + " ==");
 		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
 	}
 	
