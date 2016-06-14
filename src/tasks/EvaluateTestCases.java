@@ -1,39 +1,55 @@
 package tasks;
 
 
+import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import config.ParsingArguments;
 import utils.FileListUnderDirectory;
 import utils.TestCommandHelp;
 
 public class EvaluateTestCases {
 	
 	public void getRandoopCoverage() {
-		String targetLibrary = "commons-math3-3.6.1";
-		String testCaseDir = "./randoop-tests-180";
+		String targetLibrary = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
 		
-		String[] dependancies = {
-			testCaseDir,
-			"./targets/" + targetLibrary
-		};
+		String testCasePrefix = prefix + File.separator + "randoop-tests";
+		String reportDirPrefix = prefix + File.separator + "randoop-reports";
 		
-		System.out.println("Compiling JUnit Test Cases...");
+		File file = new File(reportDirPrefix);
+		if (!file.exists()) file.mkdir();
+	
+		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
+		int timeLimit = 180;
+		String workingPath = ".";
+		String[] dependancies = {targetLibraryAndDependancy};
 		
-		List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
-		for (String testFile : files) {
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		for (int seed = 0; seed < 10; seed++) {
+			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
+			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
 			
-			String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
-			System.out.println(relativePath);
-			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+			System.out.println("== Compiling test cases... ==");
+			
+			for (String testFile : files) {
+				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
+				System.out.println(relativePath);
+				TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+			}
+			
+			String reportDir = reportDirPrefix + "-report-" + seed;
+			String sourceDir = ".";
+			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
+			String targetTests = "RegressionTest*";
+			
+			Runnable work = new runPiTestRandoopPerSeed(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath, seed);
+			executor.execute(work);
 		}
 		
-		String reportDir = "./report-randoop";
-		String sourceDir = ".";
-		String targetClasses = "org.apache.commons.math3.*";
-		String targetTests = "RegressionTest*";
-		String workingPath = ".";
-		
-		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
+		executor.shutdown();
 	}
 	
 	
@@ -75,7 +91,37 @@ public class EvaluateTestCases {
 	}
 	
 	public static void main(String[] args) {
+		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
 		etc.getRandoopCoverage();
 	}
+}
+
+class runPiTestRandoopPerSeed implements Runnable {
+	String[] dependancies;
+	String reportDir;
+	String sourceDir; 
+	String targetClasses; 
+	String targetTests; 
+	String workingPath;
+	int seed;
+	
+	public runPiTestRandoopPerSeed(String[] dependancies, String reportDir, String sourceDir, String targetClasses, String targetTests, String workingPath, int seed) {
+		this.dependancies = dependancies;
+		this.reportDir = reportDir; 
+		this.sourceDir = sourceDir;
+		this.targetClasses = targetClasses;
+		this.targetTests = targetTests;
+		this.workingPath = workingPath;
+		this.seed = seed;
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		long threadId = Thread.currentThread().getId();
+		System.out.println("== Thread: " + threadId + "Generating Randoop test cases with seed:" + seed + " ==");
+		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
+	}
+	
 }

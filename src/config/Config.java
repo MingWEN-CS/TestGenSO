@@ -1,9 +1,17 @@
 
 package config;
 
+import java.util.HashMap;
+
 public class Config {
 	
-	public static String targetLib = "commons-math3-3.6.1";
+	public static String targetLib = "google-collections-1.0";
 	public static final String targetLibraryDir = "../TargetLibraries";
+	
+	public static HashMap<String,String> libToPackage = new HashMap<String,String>();
+	
+	static {
+		libToPackage.put("google-collections-1.0", "com.google.common.");
+	}
 	
 }
