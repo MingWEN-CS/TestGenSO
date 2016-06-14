@@ -9,8 +9,10 @@ import java.util.concurrent.Executors;
 
 import config.ParsingArguments;
 import utils.FileListUnderDirectory;
+import utils.FileToLines;
 import utils.Pair;
 import utils.TestCommandHelp;
+import utils.WriteLinesToFile;
 
 public class EvaluateTestCases {
 	
@@ -33,6 +35,26 @@ public class EvaluateTestCases {
 		return lineNumbers;
 	}
 	
+	private void removeInvalidTestCases(String relativePath, List<Integer> nums) {
+		List<String> lines = FileToLines.fileToLines(relativePath);
+		List<Integer> commentPoint = new ArrayList<Integer>();
+		for (int num : nums) {
+			int current = num;
+			while (!lines.get(current).equals("@Test")) current--;
+			commentPoint.add(current);
+		}
+		
+		List<String> after = new ArrayList<String>();
+		for (int i = 0; i < lines.size(); i++)
+			if (commentPoint.contains(i))
+				after.add("// " + lines.get(i));
+			else after.add(lines.get(i));
+		
+		WriteLinesToFile.writeLinesToFile(after, relativePath);
+				
+	}
+	
+	
 	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String[] dependancies, int timeLimit) {
 		for (int seed = 0; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
@@ -50,9 +72,20 @@ public class EvaluateTestCases {
 					entryRegressionTest = testFile;
 				else {
 					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
-					getCompilingErrors(result.getValue(), relativePath);
+					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
+					while (nums.size() > 0) {
+						removeInvalidTestCases(relativePath, nums);
+						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+						nums = getCompilingErrors(result.getValue(), relativePath);
+					}
+					
 				}
+				System.out.println("== Compiling " + testFile + " successfully ==");
 			}
+			
+			// Compiling the entry point test cases
+			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
+			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
 			break;
 		}	
 	}
