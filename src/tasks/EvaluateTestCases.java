@@ -22,12 +22,13 @@ public class EvaluateTestCases {
 		results = results.trim();
 		if (results.endsWith("errors")) {
 			int index = results.indexOf(relativePath);
-			String line = results.substring(index + relativePath.length() + 1, results.indexOf(":",index + relativePath.length() + 1));
-			System.out.println(line);
 			while (index >= 0) {
+				String line = results.substring(index + relativePath.length() + 1, results.indexOf(":",index + relativePath.length() + 1));
+				lineNumbers.add(Integer.parseInt(line));
 				index = results.indexOf(relativePath, index + 1);
 			}
 		}
+		System.out.println(lineNumbers.toString());
 		return lineNumbers;
 	}
 	
