@@ -18,7 +18,7 @@ public class TestCommandHelp {
 	} 
 	
 	
-	public static String generatePiTestMutationTest(
+	public static Pair<String,String> generatePiTestMutationTest(
 			String[] dependancies,
 			String reportDir,
 			String sourceDir,
@@ -55,13 +55,13 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		System.out.println(result);
 		return result;
 	}
 	
 	
-	public static String compileJUnitTestCases(
+	public static Pair<String,String> compileJUnitTestCases(
 			String targetLibrary,
 			String testDir,
 			String[] dependancies,
@@ -82,11 +82,11 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	
-	public static String runJUnitTestCases(
+	public static Pair<String,String> runJUnitTestCases(
 			String targetLibrary,
 			String testDir,
 			String testPath,
@@ -102,11 +102,11 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	
-	public static String generateRandoopTestCases(
+	public static Pair<String,String> generateRandoopTestCases(
 			String targetLibraryAndDependancy,
 			String classList,
 			int seed,
@@ -129,11 +129,11 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	
-	public static String generateEvosuiteTestCasesForAClass(
+	public static Pair<String,String> generateEvosuiteTestCasesForAClass(
 			String targetLibrary,
 			String className,
 			int seed,
@@ -159,11 +159,11 @@ public class TestCommandHelp {
 		
 		ExecCommand executor = new ExecCommand();
 		printCommands(commands);
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	
-	public static String generateEvosuiteTestCasesForALibrary(
+	public static Pair<String,String> generateEvosuiteTestCasesForALibrary(
 			String targetLibrary,
 			String classList,
 			int seed,
@@ -185,7 +185,7 @@ public class TestCommandHelp {
 		};
 		
 		ExecCommand executor = new ExecCommand();
-		String result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	

@@ -32,8 +32,9 @@ public class ExecCommand {
 		return result.toString();
 	}
 	
-	public String execOneThread(String[] commands, String workingpath) {
+	public Pair<String,String> execOneThread(String[] commands, String workingpath) {
 		final StringBuffer result = new StringBuffer("");
+		final StringBuffer errors = new StringBuffer("");
 		try {
 			File dir = new File(workingpath);
 			Process process = Runtime.getRuntime().exec(commands, null, dir);
@@ -45,7 +46,7 @@ public class ExecCommand {
 			}
 			
 			while ((line = stdError.readLine()) != null) {
-				System.out.println(line);
+				errors.append(line + "\n");
 			}
 			
 			stdInput.close();
@@ -54,6 +55,6 @@ public class ExecCommand {
 			System.err.println("Error:" + commands);
 			return null;
 		}
-		return result.toString();
+		return new Pair<String,String>(result.toString(), errors.toString());
 	}
 }

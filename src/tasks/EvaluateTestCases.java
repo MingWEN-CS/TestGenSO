@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 
 import config.ParsingArguments;
 import utils.FileListUnderDirectory;
+import utils.Pair;
 import utils.TestCommandHelp;
 
 public class EvaluateTestCases {
@@ -38,8 +39,8 @@ public class EvaluateTestCases {
 				else if (testFile.endsWith("RegressionTest.java"))
 					entryRegressionTest = testFile;
 				else {
-					String results = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
-					getCompilingErrors(results, relativePath);
+					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					getCompilingErrors(result.getValue(), relativePath);
 				}
 			}
 			break;
