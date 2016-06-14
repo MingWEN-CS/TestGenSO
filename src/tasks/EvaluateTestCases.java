@@ -24,6 +24,7 @@ public class EvaluateTestCases {
 			int index = results.indexOf(relativePath);
 			while (index >= 0) {
 				String line = results.substring(index + relativePath.length() + 1, results.indexOf(":",index + relativePath.length() + 1));
+				System.out.println(line);
 				lineNumbers.add(Integer.parseInt(line));
 				index = results.indexOf(relativePath, index + 1);
 			}
