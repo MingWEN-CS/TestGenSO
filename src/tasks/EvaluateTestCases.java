@@ -74,7 +74,7 @@ public class EvaluateTestCases {
 	}
 	
 	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String dependancy, int timeLimit) {
-		for (int seed = 0; seed < 1; seed++) {
+		for (int seed = 1; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
 			
@@ -91,7 +91,8 @@ public class EvaluateTestCases {
 				else {
 					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
-					removeInvalidTestCases(relativePath, nums);
+					if (nums.size() > 0)
+						removeInvalidTestCases(relativePath, nums);
 //					while (nums.size() > 0) {
 //						removeInvalidTestCases(relativePath, nums);
 //						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
@@ -136,7 +137,7 @@ public class EvaluateTestCases {
 			System.out.println("== Jar Class Files Exists ==");
 		}
 		
-		for (int seed = 0; seed < 1; seed++) {
+		for (int seed = 1; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "-report-" + seed;
 			String sourceDir = ".";
