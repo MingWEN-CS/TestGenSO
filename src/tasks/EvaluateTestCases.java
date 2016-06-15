@@ -53,6 +53,7 @@ public class EvaluateTestCases {
 			while (!lines.get(begin).contains("@Test")) begin--;
 			while (end < lines.size() && !lines.get(end).contains("@Test")) end++;
 			testRange.add(new Pair<Integer,Integer>(begin, end - 1));
+			System.out.println("== Test Case Range: " + begin + " " + (end - 1));
 		}
 		
 		List<String> after = new ArrayList<String>();
@@ -73,7 +74,7 @@ public class EvaluateTestCases {
 	}
 	
 	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String dependancy, int timeLimit) {
-		for (int seed = 0; seed < 10; seed++) {
+		for (int seed = 0; seed < 1; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
 			
@@ -125,7 +126,7 @@ public class EvaluateTestCases {
 	
 		removeInvalidAndCompileJUnitTestCases(testCasePrefix, targetLibrary, targetLibraryAndDependancy, timeLimit);
 		
-		for (int seed = 0; seed < 10; seed++) {
+		for (int seed = 0; seed < 1; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "-report-" + seed;
 			String sourceDir = ".";
