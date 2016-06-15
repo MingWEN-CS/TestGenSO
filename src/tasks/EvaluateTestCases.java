@@ -20,7 +20,6 @@ public class EvaluateTestCases {
 		List<Integer> lineNumbers = new ArrayList<Integer>();
 		System.out.println("== get compiling errors == ");
 		System.out.println(results);
-		System.out.println("== end compiling errors == ");
 		results = results.trim();
 		if (results.endsWith("errors")) {
 			int index = results.indexOf(relativePath);
@@ -31,6 +30,7 @@ public class EvaluateTestCases {
 				index = results.indexOf(relativePath, index + 1);
 			}
 		}
+		System.out.println("== end compiling errors == ");
 		System.out.println(lineNumbers.toString());
 		return lineNumbers;
 	}
@@ -40,7 +40,7 @@ public class EvaluateTestCases {
 		List<Integer> commentPoint = new ArrayList<Integer>();
 		for (int num : nums) {
 			int current = num;
-			while (!lines.get(current).trim().equals("@Test")) current--;
+			while (!lines.get(current).contains("@Test")) current--;
 			commentPoint.add(current);
 		}
 		
@@ -52,11 +52,7 @@ public class EvaluateTestCases {
 		
 		WriteLinesToFile.writeLinesToFile(after, relativePath);
 			
-		
-		
-		
 	}
-	
 	
 	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String[] dependancies, int timeLimit) {
 		for (int seed = 0; seed < 10; seed++) {
@@ -76,19 +72,19 @@ public class EvaluateTestCases {
 				else {
 					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
-					while (nums.size() > 0) {
-						removeInvalidTestCases(relativePath, nums);
-						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
-						nums = getCompilingErrors(result.getValue(), relativePath);
-					}
-					
+					removeInvalidTestCases(relativePath, nums);
+//					while (nums.size() > 0) {
+//						removeInvalidTestCases(relativePath, nums);
+//						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+//						nums = getCompilingErrors(result.getValue(), relativePath);
+//					}
 				}
-				System.out.println("== Compiling " + testFile + " successfully ==");
 			}
 			
 			// Compiling the entry point test cases
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
+			System.out.println("== Compiling the test suite:" + seed + " successfully ==");
 			break;
 		}	
 	}
@@ -168,6 +164,26 @@ public class EvaluateTestCases {
 		EvaluateTestCases etc = new EvaluateTestCases(); 
 		etc.getRandoopCoverage();
 //		test();
+//		List<Integer> tmp = new ArrayList<Integer>();
+//		tmp.add(61);
+//		tmp.add(37);
+//		etc.removeInvalidTestCases("RegressionTest1.java", tmp);
+//		String filename = "RegressionTest1.java";
+//		List<String> lines = FileToLines.fileToLines(filename);
+//		int target = 61;
+//		int current = target;
+//		while (!lines.get(current).trim().equals("@Test")) {
+//			System.out.println(lines.get(current));
+//			current--;
+//		}
+//		System.out.println(current);
+//		List<String> after = new ArrayList<String>();
+//		for (int i = 0; i < lines.size(); i++)
+//			if (i == current) 
+//				after.add("// " + lines.get(i));
+//			else after.add(lines.get(i));
+//		
+//		WriteLinesToFile.writeLinesToFile(after, filename);
 	}
 }
 
