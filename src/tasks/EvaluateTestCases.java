@@ -59,7 +59,7 @@ public class EvaluateTestCases {
 		HashSet<Integer> mark = new HashSet<Integer>();
 		for (int i = 0; i < lines.size(); i++) {
 			int index = withInRange(testRange, i);
-			if (index > 0) {
+			if (index >= 0) {
 				after.add("// " + lines.get(i));
 				mark.add(index);
 			}
