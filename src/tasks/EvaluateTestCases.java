@@ -22,7 +22,7 @@ public class EvaluateTestCases {
 		System.out.println("== get compiling errors == ");
 		System.out.println(results);
 		results = results.trim();
-		if (results.endsWith("errors")) {
+		if (results.endsWith("errors") || results.endsWith("error")) {
 			int index = results.indexOf(relativePath);
 			while (index >= 0) {
 				String line = results.substring(index + relativePath.length() + 1, results.indexOf(":",index + relativePath.length() + 1));
