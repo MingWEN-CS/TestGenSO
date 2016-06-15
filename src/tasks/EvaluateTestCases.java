@@ -46,21 +46,23 @@ public class EvaluateTestCases {
 		
 		List<String> after = new ArrayList<String>();
 		for (int i = 0; i < lines.size(); i++)
-			if (commentPoint.contains(i))
+			if (commentPoint.contains(i)) {
+				System.out.println("== Removed test cases at line :" + i + " ==");
 				after.add("// " + lines.get(i));
+			}
 			else after.add(lines.get(i));
 		
 		WriteLinesToFile.writeLinesToFile(after, relativePath);
 			
 	}
 	
-	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String[] dependancies, int timeLimit) {
+	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String dependancy, int timeLimit) {
 		for (int seed = 0; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
 			
 			System.out.println("== Compiling test cases... ==");
-			
+			String[] dependancies = {dependancy, testCaseDir};
 			String entryRegressionTest = "";
 			String entryErrorTest = "";
 			for (String testFile : files) {
@@ -85,7 +87,6 @@ public class EvaluateTestCases {
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
 			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
 			System.out.println("== Compiling the test suite:" + seed + " successfully ==");
-			break;
 		}	
 	}
 		
@@ -102,23 +103,23 @@ public class EvaluateTestCases {
 		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
 		int timeLimit = 180;
 		String workingPath = ".";
-		String[] dependancies = {targetLibraryAndDependancy};
+		
 		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 	
-		removeInvalidAndCompileJUnitTestCases(testCasePrefix, targetLibrary, dependancies, timeLimit);
+		removeInvalidAndCompileJUnitTestCases(testCasePrefix, targetLibrary, targetLibraryAndDependancy, timeLimit);
 		
-//		for (int seed = 0; seed < 10; seed++) {
-//
-//			String reportDir = reportDirPrefix + "-report-" + seed;
-//			String sourceDir = ".";
-//			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
-//			String targetTests = "RegressionTest*";
-//			
-//			Runnable work = new runPiTestRandoopPerSeed(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath, seed);
-//			executor.execute(work);
-//		}
-//		executor.shutdown();
+		for (int seed = 0; seed < 10; seed++) {
+			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
+			String reportDir = reportDirPrefix + File.separator + "-report-" + seed;
+			String sourceDir = ".";
+			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
+			String targetTests = "RegressionTest";
+			String[] dependancies = {targetLibraryAndDependancy, testCaseDir};
+			Runnable work = new runPiTestRandoopPerSeed(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath, seed);
+			executor.execute(work);
+		}
+		executor.shutdown();
 	}
 	
 	
