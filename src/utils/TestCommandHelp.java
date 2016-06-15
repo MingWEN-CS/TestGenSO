@@ -189,7 +189,7 @@ public class TestCommandHelp {
 				"-jar",
 				"./lib/evosuite-1.0.3.jar",
 				"-target",
-				"./targets/" + targetLibrary,
+				targetLibrary,
 				"-generateSuite",
 				"-projectCP",
 				dependancies,
