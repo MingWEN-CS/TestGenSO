@@ -126,13 +126,23 @@ public class EvaluateTestCases {
 	
 		removeInvalidAndCompileJUnitTestCases(testCasePrefix, targetLibrary, targetLibraryAndDependancy, timeLimit);
 		
+		System.out.println("== Extracting Jar Class Files == ");
+		String classDir = prefix + File.separator + targetLibrary;
+		file = new File(classDir);
+		if (!file.exists()) {
+			TestCommandHelp.extractJarClassFiles(prefix + File.separator + "lib" + File.separator + targetLibrary + ".jar", classDir);
+			System.out.println("== Finish Extracting Jar Class Files == ");
+		} else {
+			System.out.println("== Jar Class Files Exists ==");
+		}
+		
 		for (int seed = 0; seed < 1; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "-report-" + seed;
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
 			String targetTests = "RegressionTest";
-			String[] dependancies = {targetLibraryAndDependancy, testCaseDir};
+			String[] dependancies = {targetLibraryAndDependancy, testCaseDir, classDir};
 			Runnable work = new runPiTestRandoopPerSeed(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath, seed);
 			executor.execute(work);
 		}

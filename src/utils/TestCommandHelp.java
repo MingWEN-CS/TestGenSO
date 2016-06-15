@@ -133,6 +133,19 @@ public class TestCommandHelp {
 		return result;
 	}
 	
+	public static void extractJarClassFiles(String file, String workingPath) {
+		String[] commands =  {
+				"jar",
+				"-xvf",
+				file
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		executor.execOneThread(commands, workingPath);
+		
+	}
+	
 	public static Pair<String,String> generateEvosuiteTestCasesForAClass(
 			String targetLibrary,
 			String className,
