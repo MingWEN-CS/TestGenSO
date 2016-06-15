@@ -43,11 +43,22 @@ public class GenerateTestCases {
 		executor.shutdown();
 	}
 	
+	private static String combineAllFileNameWithSemiColon(String dir) {
+		File file = new File(dir);
+		File[] files = file.listFiles();
+		String combine = files[1].getAbsolutePath();
+		for (int i = 1; i < files.length; i++) {
+			combine += ":" + files[i].getAbsolutePath();
+		}
+		return combine;
+	}
+	
 	public static void generateEvosuiteTestCases() {
 		String libName = config.Config.targetLib;
 		String prefix = config.Config.targetLibraryDir + File.separator + libName;
 		String libPath = prefix + File.separator + "lib" + File.separator + libName + ".jar";
-		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
+		String targetLibraryAndDependancy = combineAllFileNameWithSemiColon(prefix + File.separator + "lib");
+		
 		int timeLimit = 30;
 		String workingPath = ".";
 		String testCaseDir = prefix + File.separator + "evosuite-tests";
