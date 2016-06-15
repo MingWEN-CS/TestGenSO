@@ -61,7 +61,7 @@ public class EvaluateTestCases {
 			int index = withInRange(testRange, i);
 			if (index > 0) {
 				after.add("// " + lines.get(i));
-				mark.add(i);
+				mark.add(index);
 			}
 			else after.add(lines.get(i));
 		}
