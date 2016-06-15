@@ -139,7 +139,7 @@ public class EvaluateTestCases {
 		
 		for (int seed = 1; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
-			String reportDir = reportDirPrefix + File.separator + "-report-" + seed;
+			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
 			String targetTests = "RegressionTest";

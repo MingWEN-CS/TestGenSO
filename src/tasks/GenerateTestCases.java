@@ -43,11 +43,57 @@ public class GenerateTestCases {
 		executor.shutdown();
 	}
 	
+	public static void generateEvosuiteTestCases() {
+		String libName = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + libName;
+		String libPath = prefix + File.separator + "lib" + File.separator + libName + ".jar";
+		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
+		int timeLimit = 30;
+		String workingPath = ".";
+		String testCaseDir = prefix + File.separator + "evosuite-tests";
+		File file = new File(testCaseDir);
+		if (!file.exists())
+			file.mkdir();
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		for (int seed = 0; seed < 10; seed++) {
+			String outputDir = testCaseDir + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
+			Runnable work = new runEvosuiteTestCasesPerSeed(libPath, seed, timeLimit, targetLibraryAndDependancy, outputDir, workingPath);
+			executor.execute(work);
+		}
+		executor.shutdown();
+	}
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
-		generateRandoopTestCases();
+		generateEvosuiteTestCases();
 	}
+}
+
+class runEvosuiteTestCasesPerSeed implements Runnable {
+	
+	String targetjar;
+	int seed;
+	int timeLimit;
+	String dependancies;
+	String outputDir;
+	String workingPath;
+	
+	public runEvosuiteTestCasesPerSeed(String targetjar,  int seed, int timeLimit, String dependancies,String outputDir, String workingPath) {
+		this.targetjar = targetjar;
+		this.seed = seed;
+		this.timeLimit = timeLimit;
+		this.dependancies = dependancies;
+		this.outputDir = outputDir;
+		this.workingPath = workingPath;
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		long threadId = Thread.currentThread().getId();
+		System.out.println("== Thread: " + threadId + "Generating Evosuite test cases with seed:" + seed + " ==");
+		TestCommandHelp.generateEvosuiteTestCasesForALibrary(targetjar, seed, timeLimit, dependancies, outputDir, workingPath);
+	}	
 }
 
 class runRandoopTestCasesPerSeed implements Runnable {
@@ -74,6 +120,5 @@ class runRandoopTestCasesPerSeed implements Runnable {
 		long threadId = Thread.currentThread().getId();
 		System.out.println("== Thread: " + threadId + "Generating Randoop test cases with seed:" + seed + " ==");
 		TestCommandHelp.generateRandoopTestCases(targetLibraryAndDependancy, classlist, seed, timeLimit, outputDir, workingPath);
-	}
-	
+	}	
 }

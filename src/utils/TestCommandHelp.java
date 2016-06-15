@@ -178,9 +178,9 @@ public class TestCommandHelp {
 	
 	public static Pair<String,String> generateEvosuiteTestCasesForALibrary(
 			String targetLibrary,
-			String classList,
 			int seed,
 			int timeLimit,
+			String dependancies,
 			String outputDir,
 			String workingPath) {
 		
@@ -191,12 +191,16 @@ public class TestCommandHelp {
 				"-target",
 				"./targets/" + targetLibrary,
 				"-generateSuite",
+				"-projectCP",
+				dependancies,
 				"-seed",
 				"" + seed,
+				"-Dtest_dir=" + outputDir,
 				"-Dsearch_budget=" + timeLimit,
 				"-Dstopping_condition=MaxTime"
 		};
 		
+		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
