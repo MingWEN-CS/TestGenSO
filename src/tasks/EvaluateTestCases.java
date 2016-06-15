@@ -3,6 +3,7 @@ package tasks;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,23 +36,38 @@ public class EvaluateTestCases {
 		return lineNumbers;
 	}
 	
+	private int withInRange(List<Pair<Integer,Integer>> ranges, int line) {
+		for (int i = 0; i < ranges.size(); i++) {
+			Pair<Integer,Integer> range = ranges.get(i);			
+			if (range.getKey() <= line && range.getValue() >= line) return i;
+		}
+		return -1;
+	}
+	
 	private void removeInvalidTestCases(String relativePath, List<Integer> nums) {
 		List<String> lines = FileToLines.fileToLines(relativePath);
-		List<Integer> commentPoint = new ArrayList<Integer>();
+		List<Pair<Integer,Integer>> testRange = new ArrayList<Pair<Integer,Integer>>();
 		for (int num : nums) {
-			int current = num;
-			while (!lines.get(current).contains("@Test")) current--;
-			commentPoint.add(current);
+			int begin = num;
+			int end = num;
+			while (!lines.get(begin).contains("@Test")) begin--;
+			while (end < lines.size() && !lines.get(end).contains("@Test")) end++;
+			testRange.add(new Pair<Integer,Integer>(begin, end - 1));
 		}
 		
 		List<String> after = new ArrayList<String>();
-		for (int i = 0; i < lines.size(); i++)
-			if (commentPoint.contains(i)) {
-				System.out.println("== Removed test cases at line :" + i + " ==");
+		HashSet<Integer> mark = new HashSet<Integer>();
+		for (int i = 0; i < lines.size(); i++) {
+			int index = withInRange(testRange, i);
+			if (index > 0) {
 				after.add("// " + lines.get(i));
+				mark.add(i);
 			}
 			else after.add(lines.get(i));
-		
+		}
+		for (int i : mark) {
+			System.out.println("== Removed test cases:" + testRange.get(i).toString() + " ==");
+		}
 		WriteLinesToFile.writeLinesToFile(after, relativePath);
 			
 	}
