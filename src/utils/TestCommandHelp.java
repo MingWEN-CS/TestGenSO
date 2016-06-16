@@ -98,7 +98,7 @@ public class TestCommandHelp {
 		String[] commands = {
 				"java",
 				"-cp",
-				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar:./targets/" + targetLibrary + ":" + testDir,
+				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar:" + targetLibrary + ":" + testDir,
 				"org.junit.runner.JUnitCore",
 				testPath
 		};

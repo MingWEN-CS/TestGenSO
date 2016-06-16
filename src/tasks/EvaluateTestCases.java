@@ -190,9 +190,15 @@ public class EvaluateTestCases {
 				} else {
 					System.out.println("Already Compiled:" + relativePath);
 				}
+				
+				
+				System.out.println("Running JUnit Test Cases..");
+				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(targetLibraryAndDependancy, testCaseDir, relativePath, workingPath);
+				System.out.println(results.getValue());
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
+			
 			
 			System.out.println("Runinng PiTest on Evosuite Test Cases...");
 		
