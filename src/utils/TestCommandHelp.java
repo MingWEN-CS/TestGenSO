@@ -29,7 +29,7 @@ public class TestCommandHelp {
 		
 		
 		// required pitest libraries
-		String classPath = "../../TestGenSO/lib/pitest-command-line-1.1.10.jar:../../TestGenSO/lib/junit-4.12.jar:./lib/pitest-1.1.10.jar:../../TestGenSO/lib/hamcrest-all-1.3.jar";
+		String classPath = "../../TestGenSO/lib/pitest-command-line-1.1.10.jar:../../TestGenSO/lib/junit-4.12.jar:../../TestGenSO/lib/pitest-1.1.10.jar:../../TestGenSO/lib/hamcrest-all-1.3.jar";
 		
 		// path for the classes under testing and its dependencies
 		for (String dependancy : dependancies) {

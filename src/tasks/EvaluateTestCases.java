@@ -232,14 +232,15 @@ public class EvaluateTestCases {
 		String sourceDir = ".";
 		
 		String[] dependancy1 = {
-				"lib/*",
-				"bin"
+				"./lib/*",
+				"./bin"
 		};
 		
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy1, classname, workingPath);
 		String[] dependancy2 = {
-				"lib2/*",
-				"bin"
+				"./lib2/*",
+				"./bin",
+				prefix + File.separator + targetLibrary
 		};
 		
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
