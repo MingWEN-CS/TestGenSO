@@ -178,6 +178,7 @@ public class EvaluateTestCases {
 			String[] dependancies = {
 				targetLibraryAndDependancy,
 				"./lib/evosuite-standalone-runtime-1.0.2.jar",
+				"./lib/slf4j-simple-1.6.1.jar",
 				testCaseDir
 			};
 			
@@ -192,9 +193,11 @@ public class EvaluateTestCases {
 				}
 				
 				
-				System.out.println("Running JUnit Test Cases..");
+				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
+				
+				System.out.println("Running JUnit Test Cases on " + classname);
 				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(dependancies, testCaseDir, 
-						relativePath.substring(0, relativePath.length() - 5), workingPath);
+						relativePath.substring(0, relativePath.length() - 5), classname);
 				System.out.println(results.getValue());
 			}
 			
