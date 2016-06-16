@@ -163,7 +163,7 @@ public class TestCommandHelp {
 			String testPath,
 			String workingPath) {
 		
-		String requiredFiles = dependancies[1];
+		String requiredFiles = dependancies[0];
 		for (int i = 1; i < dependancies.length; i++) {
 			requiredFiles += ":" + dependancies[i];
 		}
