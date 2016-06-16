@@ -90,15 +90,20 @@ public class TestCommandHelp {
 	}
 	
 	public static Pair<String,String> runJUnitTestCases(
-			String targetLibrary,
+			String[] dependancies,
 			String testDir,
 			String testPath,
 			String workingPath) {
 		
+		String requiredFiles = "";
+		for (String dependancy : dependancies) {
+			requiredFiles += ":" + dependancy;
+		}
+		
 		String[] commands = {
 				"java",
 				"-cp",
-				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar:" + targetLibrary + ":" + testDir,
+				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar" + requiredFiles,
 				"org.junit.runner.JUnitCore",
 				testPath
 		};

@@ -193,7 +193,8 @@ public class EvaluateTestCases {
 				
 				
 				System.out.println("Running JUnit Test Cases..");
-				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(targetLibraryAndDependancy, testCaseDir, relativePath, workingPath);
+				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(dependancies, testCaseDir, 
+						relativePath.substring(0, relativePath.length() - 5), workingPath);
 				System.out.println(results.getValue());
 			}
 			
