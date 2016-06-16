@@ -173,6 +173,8 @@ public class EvaluateTestCases {
 		
 		for (int seed = 0; seed < seedNum; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
+			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
+			
 			String[] dependancies = {
 				targetLibraryAndDependancy,
 				"./lib/evosuite-standalone-runtime-1.0.2.jar",
@@ -182,24 +184,29 @@ public class EvaluateTestCases {
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir,"ESTest.java");
 			for (String testFile : files) {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
-				TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
+				if (!file.exists()) {
+					TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+				} else {
+					System.out.println("Already Compiled:" + relativePath);
+				}
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
+			
+			System.out.println("Runinng PiTest on Evosuite Test Cases...");
+		
+			String sourceDir = ".";
+			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
+			String targetTests = config.Config.libToPackage.get(targetLibrary) + ".*ESTest";
+			workingPath = ".";
+			
+			TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
 		 * */
-		
-//		System.out.println("Runinng PiTest on Evosuite Test Cases...");
-//		
-//		String reportDir = "./report";
-//		String sourceDir = ".";
-//		String targetClasses = "org.apache.commons.math3.*";
-//		String targetTests = "org.apache.commons.math3.*ESTest";
-//		String workingPath = ".";
-//		
-//		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
+	
 	}
 	
 	public static void main(String[] args) {
