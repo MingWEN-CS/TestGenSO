@@ -194,10 +194,10 @@ public class EvaluateTestCases {
 				
 				
 				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
-				
+				classname = classname.replace("/", ".");
 				System.out.println("Running JUnit Test Cases on " + classname);
 				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(dependancies, testCaseDir, 
-						relativePath.substring(0, relativePath.length() - 5), classname);
+						classname, workingPath);
 				System.out.println(results.getValue());
 			}
 			
