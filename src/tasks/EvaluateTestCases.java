@@ -153,45 +153,59 @@ public class EvaluateTestCases {
 	
 	
 	public void getEvosuiteCoverage() {
-		String targetLibrary = "commons-math3-3.6.1";
-		
+		String targetLibrary = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+		String testCasePrefix = prefix + File.separator + "evosuite-tests";
+		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
+		File file = new File(reportDirPrefix);
+		if (!file.exists()) file.mkdir();
 		/*
 		 * Compile JUnit Test Cases
 		 * */
+		
+		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
+		int timeLimit = 180;
+		String workingPath = ".";
+		int seedNum = 1;
+		
+		
 		System.out.println("Compiling JUnit Test Cases...");
 		
-		String[] dependancies = {
-			"./targets/" + targetLibrary,
-			"./lib/evosuite-standalone-runtime-1.0.3.jar",
-			"./evosuite-tests/"
-		};
-		
-		List<String> files = FileListUnderDirectory.getFileListUnder("./evosuite-tests/","ESTest.java");
-		for (String testFile : files) {
-			System.out.println(testFile);
-			String relativePath = testFile.substring(testFile.indexOf("evosuite-tests"));
-			TestCommandHelp.compileJUnitTestCases(targetLibrary, "./evosuite-tests/", dependancies, relativePath, ".");
+		for (int seed = 0; seed < seedNum; seed++) {
+			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
+			String[] dependancies = {
+				targetLibraryAndDependancy,
+				"./lib/evosuite-standalone-runtime-1.0.2.jar",
+				testCaseDir
+			};
+			
+			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir,"ESTest.java");
+			for (String testFile : files) {
+				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
+				TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+			}
+			
+			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
 		}
-		
 		/*
 		 * Evaluate the test cases using PiTest
 		 * */
 		
-		System.out.println("Runinng PiTest on Evosuite Test Cases...");
-		
-		String reportDir = "./report";
-		String sourceDir = ".";
-		String targetClasses = "org.apache.commons.math3.*";
-		String targetTests = "org.apache.commons.math3.*ESTest";
-		String workingPath = ".";
-		
-		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
+//		System.out.println("Runinng PiTest on Evosuite Test Cases...");
+//		
+//		String reportDir = "./report";
+//		String sourceDir = ".";
+//		String targetClasses = "org.apache.commons.math3.*";
+//		String targetTests = "org.apache.commons.math3.*ESTest";
+//		String workingPath = ".";
+//		
+//		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
 	}
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		etc.getRandoopCoverage();
+		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
@@ -240,7 +254,7 @@ class runPiTestRandoopPerSeed implements Runnable {
 		// TODO Auto-generated method stub
 		long threadId = Thread.currentThread().getId();
 		System.out.println("== Thread: " + threadId + "Evaluating Randoop test cases with seed:" + seed + " ==");
-		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, targetClasses, targetTests, workingPath);
+		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
 	}
 	
 }

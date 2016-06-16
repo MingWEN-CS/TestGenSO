@@ -22,6 +22,7 @@ public class TestCommandHelp {
 			String[] dependancies,
 			String reportDir,
 			String sourceDir,
+			String excludeClasses,
 			String targetClasses,
 			String targetTests,
 			String workingPath
@@ -45,6 +46,8 @@ public class TestCommandHelp {
 				reportDir,
 				"--sourceDirs",
 				sourceDir,
+				"--excludedClasses",
+				excludeClasses.equals("") ? "CIVI_UNMATCH_FORMAT" : excludeClasses, 
 				"--targetClasses",
 				targetClasses,
 				"--mutators",
@@ -82,7 +85,7 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		Pair<String,String> result = executor.execOneThread(commands, workingPath);
+		Pair<String,String> result = executor.execOneThread(commands, ".");
 		return result;
 	}
 	
