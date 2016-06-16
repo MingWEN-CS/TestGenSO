@@ -198,7 +198,7 @@ public class EvaluateTestCases {
 		
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
-			String targetTests = config.Config.libToPackage.get(targetLibrary) + ".*ESTest";
+			String targetTests = config.Config.libToPackage.get(targetLibrary) + "*ESTest";
 			workingPath = ".";
 			
 			TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
