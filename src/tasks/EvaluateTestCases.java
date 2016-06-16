@@ -228,23 +228,25 @@ public class EvaluateTestCases {
 		if (!file.exists()) file.mkdir();
 		
 		String classname = "test.TestSuiteSO";
-		String workingPath = ".";
+		String workingPath = prefix;
 		String sourceDir = ".";
 		
 		String[] dependancy1 = {
-				prefix + File.separator + "./lib1/*",
-				prefix + File.separator + "./bin"
+				"lib/*",
+				"bin"
 		};
 		
-		TestCommandHelp.runJUnitTestCases(dependancy1, prefix, classname, workingPath);
+		TestCommandHelp.runJUnitTestCasesLocally(dependancy1, classname, workingPath);
 		String[] dependancy2 = {
-				prefix + File.separator + "./lib2/*",
-				prefix + File.separator + "./bin"
+				"lib2/*",
+				"bin"
 		};
 		
-		TestCommandHelp.runJUnitTestCases(dependancy2, prefix, classname, workingPath);
+		TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
 		String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
-		TestCommandHelp.generatePiTestMutationTest(dependancy2, reportDir, sourceDir, "", targetClasses, classname, workingPath);
+		
+		System.out.println("== Running PiTest ==");
+		TestCommandHelp.generatePiTestMutationTestLocally(dependancy2, "testSO-reports", sourceDir, "", targetClasses, classname, workingPath);
 		
 		
 	}

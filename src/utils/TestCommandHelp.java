@@ -17,6 +17,50 @@ public class TestCommandHelp {
 		System.out.println();
 	} 
 	
+	public static Pair<String,String> generatePiTestMutationTestLocally(
+			String[] dependancies,
+			String reportDir,
+			String sourceDir,
+			String excludeClasses,
+			String targetClasses,
+			String targetTests,
+			String workingPath
+			) {
+		
+		
+		// required pitest libraries
+		String classPath = "../../TestGenSO/lib/pitest-command-line-1.1.10.jar:../../TestGenSO/lib/junit-4.12.jar:./lib/pitest-1.1.10.jar:../../TestGenSO/lib/hamcrest-all-1.3.jar";
+		
+		// path for the classes under testing and its dependencies
+		for (String dependancy : dependancies) {
+			classPath += ":" + dependancy;
+		}
+		
+		String[] commands = {
+				"java",
+				"-cp",
+				classPath,
+				"org.pitest.mutationtest.commandline.MutationCoverageReport",
+				"--reportDir",
+				reportDir,
+				"--sourceDirs",
+				sourceDir,
+				"--excludedClasses",
+				excludeClasses.equals("") ? "CIVI_UNMATCH_FORMAT" : excludeClasses, 
+				"--targetClasses",
+				targetClasses,
+				"--mutators",
+				"ALL",
+				"--targetTests",
+				targetTests
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
+		System.out.println(result);
+		return result;
+	}
 	
 	public static Pair<String,String> generatePiTestMutationTest(
 			String[] dependancies,
@@ -104,6 +148,30 @@ public class TestCommandHelp {
 				"java",
 				"-cp",
 				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar" + requiredFiles,
+				"org.junit.runner.JUnitCore",
+				testPath
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
+		return result;
+	}
+	
+	public static Pair<String,String> runJUnitTestCasesLocally(
+			String[] dependancies,
+			String testPath,
+			String workingPath) {
+		
+		String requiredFiles = dependancies[1];
+		for (int i = 1; i < dependancies.length; i++) {
+			requiredFiles += ":" + dependancies[i];
+		}
+		
+		String[] commands = {
+				"java",
+				"-cp",
+				requiredFiles,
 				"org.junit.runner.JUnitCore",
 				testPath
 		};
