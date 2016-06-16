@@ -163,7 +163,7 @@ public class EvaluateTestCases {
 		 * Compile JUnit Test Cases
 		 * */
 		
-		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
+		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + targetLibrary + ".jar";
 		int timeLimit = 30;
 		String workingPath = ".";
 		int seedNum = 1;
