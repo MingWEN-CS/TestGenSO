@@ -41,6 +41,7 @@ public class ExecCommand {
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 			String line = null;
+			process.waitFor();
 			while ((line = stdInput.readLine()) != null) {
 				System.out.println(line);
 				result.append(line + "\n");
