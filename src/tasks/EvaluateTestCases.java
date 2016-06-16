@@ -164,7 +164,7 @@ public class EvaluateTestCases {
 		 * */
 		
 		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + "*";
-		int timeLimit = 180;
+		int timeLimit = 30;
 		String workingPath = ".";
 		int seedNum = 1;
 		
