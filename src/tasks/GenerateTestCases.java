@@ -57,7 +57,8 @@ public class GenerateTestCases {
 		String libName = config.Config.targetLib;
 		String prefix = config.Config.targetLibraryDir + File.separator + libName;
 		String libPath = prefix + File.separator + "lib" + File.separator + libName + ".jar";
-		String targetLibraryAndDependancy = combineAllFileNameWithSemiColon(prefix + File.separator + "lib");
+//		String targetLibraryAndDependancy = combineAllFileNameWithSemiColon(prefix + File.separator + "lib");
+		String targetLibraryAndDependancy = libPath;
 		
 		int timeLimit = 30;
 		String workingPath = ".";
