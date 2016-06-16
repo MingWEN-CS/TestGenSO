@@ -209,9 +209,10 @@ public class EvaluateTestCases {
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
 			String targetTests = config.Config.libToPackage.get(targetLibrary) + "*ESTest";
+			String excludedClasses = config.Config.libToPackage.get(targetLibrary) + "*_ESTest_scaffolding";
 			workingPath = ".";
 			
-			TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
+			TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
@@ -219,10 +220,39 @@ public class EvaluateTestCases {
 	
 	}
 	
+	public void getTestSOCoverage() {
+		String targetLibrary = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+		String reportDir = prefix + File.separator + "testSO-reports";
+		File file = new File(reportDir);
+		if (!file.exists()) file.mkdir();
+		
+		String classname = "test.TestSuiteSO";
+		String workingPath = ".";
+		String sourceDir = ".";
+		
+		String[] dependancy1 = {
+				prefix + File.separator + "./lib1/*",
+				prefix + File.separator + "./bin"
+		};
+		
+		TestCommandHelp.runJUnitTestCases(dependancy1, prefix, classname, workingPath);
+		String[] dependancy2 = {
+				prefix + File.separator + "./lib2/*",
+				prefix + File.separator + "./bin"
+		};
+		
+		TestCommandHelp.runJUnitTestCases(dependancy2, prefix, classname, workingPath);
+		String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
+		TestCommandHelp.generatePiTestMutationTest(dependancy2, reportDir, sourceDir, "", targetClasses, classname, workingPath);
+		
+		
+	}
+	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		etc.getEvosuiteCoverage();
+		etc.getTestSOCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
