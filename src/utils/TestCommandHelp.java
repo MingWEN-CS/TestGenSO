@@ -108,6 +108,7 @@ public class TestCommandHelp {
 	
 	
 	public static Pair<String,String> compileJUnitTestCases(
+			String command,
 			String targetLibrary,
 			String testDir,
 			String[] dependancies,
@@ -120,7 +121,7 @@ public class TestCommandHelp {
 		}
 		
 		String[] commands = {
-				"javac",
+				command,
 				"-cp",
 				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar" + requiredFiles,
 				testPath
@@ -133,6 +134,7 @@ public class TestCommandHelp {
 	}
 	
 	public static Pair<String,String> runJUnitTestCases(
+			String command,
 			String[] dependancies,
 			String testDir,
 			String testPath,
@@ -144,7 +146,7 @@ public class TestCommandHelp {
 		}
 		
 		String[] commands = {
-				"java",
+				command,
 				"-cp",
 				"./lib/junit-4.12.jar:./lib/hamcrest-all-1.3.jar" + requiredFiles,
 				"org.junit.runner.JUnitCore",
@@ -260,7 +262,7 @@ public class TestCommandHelp {
 			String workingPath) {
 		
 		String[] commands = {
-				"java",
+				"../jdk1.8.0_91/bin/java",
 				"-jar",
 				"./lib/evosuite-1.0.3.jar",
 				"-target",

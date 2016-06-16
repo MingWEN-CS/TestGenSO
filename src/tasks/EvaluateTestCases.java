@@ -89,7 +89,7 @@ public class EvaluateTestCases {
 				else if (testFile.endsWith("RegressionTest.java"))
 					entryRegressionTest = testFile;
 				else {
-					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, relativePath, ".");
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
 					if (nums.size() > 0)
 						removeInvalidTestCases(relativePath, nums);
@@ -102,8 +102,8 @@ public class EvaluateTestCases {
 			}
 			
 			// Compiling the entry point test cases
-			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
-			TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
+			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
+			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
 			System.out.println("== Compiling the test suite:" + seed + " successfully ==");
 		}	
 	}
@@ -167,7 +167,7 @@ public class EvaluateTestCases {
 		int timeLimit = 30;
 		String workingPath = ".";
 		int seedNum = 1;
-		
+		boolean updateData = true;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
@@ -186,8 +186,8 @@ public class EvaluateTestCases {
 			for (String testFile : files) {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
-				if (!file.exists()) {
-					TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+				if (!file.exists() || updateData) {
+					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac",targetLibrary, testCaseDir, dependancies, relativePath, ".");
 				} else {
 					System.out.println("Already Compiled:" + relativePath);
 				}
@@ -197,7 +197,7 @@ public class EvaluateTestCases {
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
 				System.out.println("Running JUnit Test Cases on " + classname);
-				Pair<String,String> results = TestCommandHelp.runJUnitTestCases(dependancies, testCaseDir, 
+				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, 
 						classname, workingPath);
 				System.out.println(results.getValue());
 			}
