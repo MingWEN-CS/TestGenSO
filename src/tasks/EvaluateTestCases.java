@@ -212,7 +212,7 @@ public class EvaluateTestCases {
 			String excludedClasses = config.Config.libToPackage.get(targetLibrary) + "*_ESTest_scaffolding";
 			workingPath = ".";
 			
-			TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
@@ -240,7 +240,7 @@ public class EvaluateTestCases {
 		String[] dependancy2 = {
 				"./lib2/*",
 				"./bin",
-				prefix + File.separator + targetLibrary
+				targetLibrary
 		};
 		
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
@@ -255,7 +255,7 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		etc.getTestSOCoverage();
+		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
@@ -304,7 +304,7 @@ class runPiTestRandoopPerSeed implements Runnable {
 		// TODO Auto-generated method stub
 		long threadId = Thread.currentThread().getId();
 		System.out.println("== Thread: " + threadId + "Evaluating Randoop test cases with seed:" + seed + " ==");
-		TestCommandHelp.generatePiTestMutationTest(dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
+		TestCommandHelp.generatePiTestMutationTest("java",dependancies, reportDir, sourceDir, "", targetClasses, targetTests, workingPath);
 	}
 	
 }

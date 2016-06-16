@@ -62,6 +62,7 @@ public class TestCommandHelp {
 	}
 	
 	public static Pair<String,String> generatePiTestMutationTest(
+			String command,
 			String[] dependancies,
 			String reportDir,
 			String sourceDir,
@@ -81,7 +82,7 @@ public class TestCommandHelp {
 		}
 		
 		String[] commands = {
-				"java",
+				command,
 				"-cp",
 				classPath,
 				"org.pitest.mutationtest.commandline.MutationCoverageReport",
