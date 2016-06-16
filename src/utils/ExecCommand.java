@@ -42,10 +42,12 @@ public class ExecCommand {
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 			String line = null;
 			while ((line = stdInput.readLine()) != null) {
+				System.out.println(line);
 				result.append(line + "\n");
 			}
 			
 			while ((line = stdError.readLine()) != null) {
+				System.err.println(line);
 				errors.append(line + "\n");
 			}
 			

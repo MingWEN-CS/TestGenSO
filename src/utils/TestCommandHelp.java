@@ -58,7 +58,6 @@ public class TestCommandHelp {
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		Pair<String,String> result = executor.execOneThread(commands, workingPath);
-		System.out.println(result);
 		return result;
 	}
 	
@@ -103,7 +102,6 @@ public class TestCommandHelp {
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		Pair<String,String> result = executor.execOneThread(commands, workingPath);
-		System.out.println(result);
 		return result;
 	}
 	
