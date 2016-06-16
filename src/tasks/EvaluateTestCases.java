@@ -172,7 +172,7 @@ public class EvaluateTestCases {
 		System.out.println("Compiling JUnit Test Cases...");
 		
 		for (int seed = 0; seed < seedNum; seed++) {
-			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
+			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String[] dependancies = {
 				targetLibraryAndDependancy,
 				"./lib/evosuite-standalone-runtime-1.0.2.jar",
