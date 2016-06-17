@@ -186,24 +186,22 @@ public class EvaluateTestCases {
 			for (String testFile : files) {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				System.out.println(relativePath);
-			}
-			
-			for (String testFile : files) {
-				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
 				if (!file.exists() || updateData) {
 					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 				} else {
 					System.out.println("Already Compiled:" + relativePath);
 				}
-				
-				
+			}
+			
+			for (String testFile : files) {
+				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
-//				System.out.println("Running JUnit Test Cases on " + classname);
-//				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, classname, workingPath);
-//				System.out.println(results.getValue());
+				System.out.println("Running JUnit Test Cases on " + classname);
+				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java", dependancies, testCaseDir, classname, workingPath);
+				System.out.println(results.getValue());
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
@@ -215,7 +213,7 @@ public class EvaluateTestCases {
 			String excludedClasses = config.Config.libToPackage.get(targetLibrary) + "*_ESTest_scaffolding";
 			workingPath = ".";
 			
-			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+//			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
