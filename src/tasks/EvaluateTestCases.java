@@ -171,7 +171,7 @@ public class EvaluateTestCases {
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
-		for (int seed = 0; seed < seedNum; seed++) {
+		for (int seed = 2; seed < 3; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
 			
@@ -226,7 +226,14 @@ public class EvaluateTestCases {
 			String excludedClasses = config.Config.libToPackage.get(targetLibrary) + "*_ESTest_scaffolding";
 			workingPath = ".";
 			
-			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+			String[] dependancies2 = {
+					prefix + File.separator + targetLibrary,
+					"./lib/evosuite-standalone-runtime-1.0.2.jar",
+					"./lib/slf4j-simple-1.6.1.jar",
+					testCaseDir
+				};
+			
+			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
