@@ -166,12 +166,12 @@ public class EvaluateTestCases {
 		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + targetLibrary + ".jar";
 		int timeLimit = 30;
 		String workingPath = ".";
-		int seedNum = 2;
+		int seedNum = 1;
 		boolean updateData = false;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
-		for (int seed = 1; seed < seedNum; seed++) {
+		for (int seed = 0; seed < seedNum; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
 			
