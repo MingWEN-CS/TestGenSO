@@ -188,7 +188,15 @@ public class EvaluateTestCases {
 				System.out.println(relativePath);
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
 				if (!file.exists() || updateData) {
-					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
+					
+					while (nums.size() > 0) {
+						removeInvalidTestCases(relativePath, nums);
+						result = TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+						nums = getCompilingErrors(result.getValue(), relativePath);
+					}
+					
 				} else {
 					System.out.println("Already Compiled:" + relativePath);
 				}

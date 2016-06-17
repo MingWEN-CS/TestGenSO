@@ -54,8 +54,8 @@ public class ExecCommand {
 			stdInput.close();
 			stdError.close();
 		} catch (Exception e) {
-			System.err.println("Error:" + commands);
-			return null;
+			System.err.println("Error:" + e.getClass());
+			return new Pair<String,String>(result.toString(), errors.toString());
 		}
 		return new Pair<String,String>(result.toString(), errors.toString());
 	}
