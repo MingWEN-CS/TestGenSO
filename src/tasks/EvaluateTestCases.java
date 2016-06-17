@@ -177,7 +177,7 @@ public class EvaluateTestCases {
 			
 			String[] dependancies = {
 				targetLibraryAndDependancy,
-				"./lib/evosuite-standalone-runtime-1.0.3.jar",
+				"./lib/evosuite-standalone-runtime-1.0.2.jar",
 				"./lib/slf4j-simple-1.6.1.jar",
 				testCaseDir
 			};
@@ -203,22 +203,22 @@ public class EvaluateTestCases {
 			}
 			
 			
-//			for (String testFile : files) {
-//				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
-//				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
-//				classname = classname.replace("/", ".");
-//				classname = classname.substring(0, classname.length() - 5);
-//				System.out.println("Running JUnit Test Cases on " + classname);
-//				try {
-//					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java", dependancies, testCaseDir, classname, workingPath);
-//					System.out.println(results.getValue());
-//				} catch (Exception e) {
-//					System.out.println("Exception:\t" + e.getClass());
-//				}
-//			}
-//			
-//			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
-//			System.out.println("Runinng PiTest on Evosuite Test Cases...");
+			for (String testFile : files) {
+				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
+				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
+				classname = classname.replace("/", ".");
+				classname = classname.substring(0, classname.length() - 5);
+				System.out.println("Running JUnit Test Cases on " + classname);
+				try {
+					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java", dependancies, testCaseDir, classname, workingPath);
+					System.out.println(results.getValue());
+				} catch (Exception e) {
+					System.out.println("Exception:\t" + e.getClass());
+				}
+			}
+			
+			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
+			System.out.println("Runinng PiTest on Evosuite Test Cases...");
 		
 			String sourceDir = ".";
 			String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
