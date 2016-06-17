@@ -166,12 +166,12 @@ public class EvaluateTestCases {
 		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + targetLibrary + ".jar";
 		int timeLimit = 30;
 		String workingPath = ".";
-		int seedNum = 1;
+		int seedNum = 2;
 		boolean updateData = true;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
-		for (int seed = 0; seed < seedNum; seed++) {
+		for (int seed = 1; seed < seedNum; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
 			
@@ -187,7 +187,7 @@ public class EvaluateTestCases {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
 				if (!file.exists() || updateData) {
-					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac",targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 				} else {
 					System.out.println("Already Compiled:" + relativePath);
 				}
