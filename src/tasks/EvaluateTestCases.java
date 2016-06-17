@@ -185,6 +185,11 @@ public class EvaluateTestCases {
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir,"ESTest.java");
 			for (String testFile : files) {
 				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
+				System.out.println(relativePath);
+			}
+			
+			for (String testFile : files) {
+				String relativePath = testFile.substring(testFile.indexOf(testCaseDir));
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
 				if (!file.exists() || updateData) {
 					TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
@@ -197,14 +202,11 @@ public class EvaluateTestCases {
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
 				System.out.println("Running JUnit Test Cases on " + classname);
-				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, 
-						classname, workingPath);
+				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, classname, workingPath);
 				System.out.println(results.getValue());
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
-			
-			
 			System.out.println("Runinng PiTest on Evosuite Test Cases...");
 		
 			String sourceDir = ".";
