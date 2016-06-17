@@ -201,9 +201,9 @@ public class EvaluateTestCases {
 				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
-				System.out.println("Running JUnit Test Cases on " + classname);
-				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, classname, workingPath);
-				System.out.println(results.getValue());
+//				System.out.println("Running JUnit Test Cases on " + classname);
+//				Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java",dependancies, testCaseDir, classname, workingPath);
+//				System.out.println(results.getValue());
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
