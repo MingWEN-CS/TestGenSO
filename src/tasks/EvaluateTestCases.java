@@ -167,7 +167,7 @@ public class EvaluateTestCases {
 		int timeLimit = 30;
 		String workingPath = ".";
 		int seedNum = 2;
-		boolean updateData = true;
+		boolean updateData = false;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
