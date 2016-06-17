@@ -177,7 +177,7 @@ public class EvaluateTestCases {
 			
 			String[] dependancies = {
 				targetLibraryAndDependancy,
-				"./lib/evosuite-standalone-runtime-1.0.2.jar",
+				"./lib/evosuite-standalone-runtime-1.0.3.jar",
 				"./lib/slf4j-simple-1.6.1.jar",
 				testCaseDir
 			};
@@ -228,7 +228,7 @@ public class EvaluateTestCases {
 			
 			String[] dependancies2 = {
 					prefix + File.separator + targetLibrary,
-					"./lib/evosuite-standalone-runtime-1.0.2.jar",
+					"./lib/evosuite-standalone-runtime-1.0.3.jar",
 					"./lib/slf4j-simple-1.6.1.jar",
 					testCaseDir
 				};
