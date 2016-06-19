@@ -168,7 +168,7 @@ public class EvaluateTestCases {
 		String workingPath = ".";
 		int seedBegin = config.Config.seedBegin;
 		int seedEnd = config.Config.seedEnd;
-		boolean updateData = false;
+		boolean updateData = true;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
@@ -189,12 +189,12 @@ public class EvaluateTestCases {
 				System.out.println(relativePath);
 				file = new File(relativePath.substring(0, relativePath.length() - 5) + ".class");
 				if (!file.exists() || updateData) {
-					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+					Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
 					
 					while (nums.size() > 0) {
 						removeInvalidTestCases(relativePath, nums);
-						result = TestCommandHelp.compileJUnitTestCases("../jdk1.8.0_91/bin/javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+						result = TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 						nums = getCompilingErrors(result.getValue(), relativePath);
 					}
 					
@@ -211,7 +211,7 @@ public class EvaluateTestCases {
 				classname = classname.substring(0, classname.length() - 5);
 				System.out.println("Running JUnit Test Cases on " + classname);
 				try {
-					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("../jdk1.8.0_91/bin/java", dependancies, testCaseDir, classname, workingPath);
+					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
 					System.out.println(results.getValue());
 				} catch (Exception e) {
 					System.out.println("Exception:\t" + e.getClass());
@@ -234,7 +234,7 @@ public class EvaluateTestCases {
 					testCaseDir
 				};
 			
-			TestCommandHelp.generatePiTestMutationTest("../jdk1.8.0_91/bin/java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
