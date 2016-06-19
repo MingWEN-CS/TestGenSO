@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.ParsingArguments;
 import utils.FileToLines;
 import utils.TestCommandHelp;
 
@@ -52,6 +53,7 @@ public class GetValidTestCasesFromLog {
 	}
 	
 	public static void main(String[] args) {
+		ParsingArguments.parsingArguments(args);
 		removeErrorTestCase();
 	}
 }
