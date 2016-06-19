@@ -46,7 +46,7 @@ public class GetValidTestCasesFromLog {
 		File file = new File(invalid);
 		if (!file.exists()) file.mkdir();
 		for (String error : errorList) {
-			String path = testCaseDir + File.separator + error.replace(".", "/");
+			String path = testCaseDir + File.separator + error.replace(".", "/") + "*";
 			String target = testCaseDir + File.separator + error;
 			TestCommandHelp.move(path, target, ",");
 		}

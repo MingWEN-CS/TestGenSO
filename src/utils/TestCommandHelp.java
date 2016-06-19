@@ -23,6 +23,7 @@ public class TestCommandHelp {
 				from,
 				to
 		};
+		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
 		Pair<String,String> result = executor.execOneThread(commands, workingPath);	
 	}
