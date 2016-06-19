@@ -262,7 +262,7 @@ public class TestCommandHelp {
 			String workingPath) {
 		
 		String[] commands = {
-				"../jdk1.8.0_91/bin/java",
+				"java",
 				"-jar",
 				"./lib/evosuite-1.0.2.jar",
 				"-target",
