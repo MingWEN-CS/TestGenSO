@@ -164,14 +164,15 @@ public class EvaluateTestCases {
 		 * */
 		
 		String targetLibraryAndDependancy = prefix + File.separator + "lib" + File.separator + targetLibrary + ".jar";
-		int timeLimit = 30;
+		int timeLimit = config.Config.evosuiteTimeLimit;
 		String workingPath = ".";
-		int seedNum = 1;
+		int seedBegin = config.Config.seedBegin;
+		int seedEnd = config.Config.seedEnd;
 		boolean updateData = false;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
-		for (int seed = 0; seed < 1; seed++) {
+		for (int seed = seedBegin; seed <= seedEnd; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
 			
