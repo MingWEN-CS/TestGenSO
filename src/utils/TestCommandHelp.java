@@ -17,6 +17,16 @@ public class TestCommandHelp {
 		System.out.println();
 	} 
 	
+	public static void move(String from, String to, String workingPath) {
+		String[] commands = {
+				"mv",
+				from,
+				to
+		};
+		ExecCommand executor = new ExecCommand();
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);	
+	}
+	
 	public static Pair<String,String> generatePiTestMutationTestLocally(
 			String[] dependancies,
 			String reportDir,
@@ -52,7 +62,7 @@ public class TestCommandHelp {
 				"--mutators",
 				"ALL",
 				"--targetTests",
-				targetTests
+ 				targetTests
 		};
 		
 		printCommands(commands);
