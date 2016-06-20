@@ -41,6 +41,7 @@ public class EvaluateTestCases {
 	private List<Integer> getRunningErrors(String results, String className) {
 		List<Integer> lineNumbers = new ArrayList<Integer>();
 		String regex = className + "\\." + "test" + "(\\d)+\\(";
+		System.out.println(className);
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(results);
 		while (matcher.find()) {
@@ -306,9 +307,9 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-//		String content = FileToLines.fileToString("./runResults.txt");
-//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-		etc.getEvosuiteCoverage();
+		String content = FileToLines.fileToString("./runResults.txt");
+		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+//		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
