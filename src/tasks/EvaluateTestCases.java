@@ -231,13 +231,15 @@ public class EvaluateTestCases {
 				try {
 					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
 					System.out.println(results.getValue());
-					List<Integer> nums = getRunningErrors(results.getValue(), relativePath);
+					List<Integer> nums = getRunningErrors(results.getValue(), classname);
+					
 					while (nums.size() > 0) {
-						
+						System.out.println("Failures at :" + nums.toString());
 						removeInvalidTestCases(relativePath, nums);
 						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
-						nums = getRunningErrors(results.getValue(), relativePath);
+						System.out.println(results.getValue());
+						nums = getRunningErrors(results.getValue(), classname);
 					}
 					
 				} catch (Exception e) {
