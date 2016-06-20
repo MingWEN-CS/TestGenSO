@@ -26,4 +26,20 @@ public class FileToLines {
 		return lines;
 	}
 
+	public static String fileToString(String filename) {
+		File file = new File(filename);
+		String content = "";
+		String line = "";
+		if (!file.exists()) return content;
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filename));
+			while ((line = in.readLine()) != null) {
+				content += line + "\n";
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return content;
+	}
 }

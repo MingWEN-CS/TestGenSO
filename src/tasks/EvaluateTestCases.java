@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import config.ParsingArguments;
 import utils.FileListUnderDirectory;
@@ -35,6 +37,22 @@ public class EvaluateTestCases {
 		System.out.println(lineNumbers.toString());
 		return lineNumbers;
 	}
+	
+	private List<Integer> getRunningErrors(String results, String className) {
+		List<Integer> lineNumbers = new ArrayList<Integer>();
+		String regex = className + "\\." + "test" + "(\\d)+\\(";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(results);
+		while (matcher.find()) {
+			String subString = results.substring(matcher.end());
+			String num = subString.substring(subString.indexOf(":") + 1, subString.indexOf(")"));
+			int line = Integer.parseInt(num);
+			System.out.println(num);
+			lineNumbers.add(line);
+		}
+		return lineNumbers;
+	}
+	
 	
 	private int withInRange(List<Pair<Integer,Integer>> ranges, int line) {
 		for (int i = 0; i < ranges.size(); i++) {
@@ -277,7 +295,9 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		etc.getEvosuiteCoverage();
+		String content = FileToLines.fileToString("./runResults.txt");
+		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+//		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);

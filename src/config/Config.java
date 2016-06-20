@@ -16,6 +16,7 @@ public class Config {
 	
 	static {
 		libToPackage.put("google-collections-1.0", "com.google.common.");
+		libToPackage.put("commons-lang3-3.4", "org.apache.commons.lang3.");
 	}
 	
 }
