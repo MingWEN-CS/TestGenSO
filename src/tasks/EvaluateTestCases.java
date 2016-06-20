@@ -231,6 +231,15 @@ public class EvaluateTestCases {
 				try {
 					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
 					System.out.println(results.getValue());
+					List<Integer> nums = getRunningErrors(results.getValue(), relativePath);
+					while (nums.size() > 0) {
+						
+						removeInvalidTestCases(relativePath, nums);
+						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
+						nums = getRunningErrors(results.getValue(), relativePath);
+					}
+					
 				} catch (Exception e) {
 					System.out.println("Exception:\t" + e.getClass());
 				}
@@ -295,9 +304,9 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		String content = FileToLines.fileToString("./runResults.txt");
-		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-//		etc.getEvosuiteCoverage();
+//		String content = FileToLines.fileToString("./runResults.txt");
+//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
