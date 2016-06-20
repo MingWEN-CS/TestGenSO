@@ -67,7 +67,9 @@ public class GenerateTestCases {
 		if (!file.exists())
 			file.mkdir();
 		ExecutorService executor = Executors.newFixedThreadPool(10);
-		for (int seed = 0; seed < 1; seed++) {
+		int seedBegin = config.Config.seedBegin;
+		int seedEnd = config.Config.seedEnd;
+		for (int seed = seedBegin; seed <= seedEnd; seed++) {
 			String outputDir = testCaseDir + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			Runnable work = new runEvosuiteTestCasesPerSeed(libPath, seed, timeLimit, targetLibraryAndDependancy, outputDir, workingPath);
 			executor.execute(work);

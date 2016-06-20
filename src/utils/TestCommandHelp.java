@@ -275,7 +275,7 @@ public class TestCommandHelp {
 		String[] commands = {
 				"java",
 				"-jar",
-				"./lib/evosuite-1.0.2.jar",
+				"./lib/evosuite-master-1.0.4-alpha1.jar",
 				"-target",
 				targetLibrary,
 				"-generateSuite",
