@@ -307,9 +307,9 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-		String content = FileToLines.fileToString("./runResults.txt");
-		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-//		etc.getEvosuiteCoverage();
+//		String content = FileToLines.fileToString("./runResults.txt");
+//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
