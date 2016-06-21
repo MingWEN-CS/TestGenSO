@@ -15,7 +15,9 @@ public class GetValidTestCasesFromLog {
 		List<String> lines = FileToLines.fileToLines(file);
 		String currentClass = "";
 		boolean flag = true;
-		for (String line : lines) {
+		System.out.println(lines.size());
+		for (int i = 0; i < lines.size(); i++) {
+			String line = lines.get(i);
 			if (line.startsWith("java -cp ./lib/junit-4.12.jar")) {
 				String[] tmp = line.split(" ");
 				if (!currentClass.equals("") && !flag)
@@ -23,9 +25,11 @@ public class GetValidTestCasesFromLog {
 				flag = true;
 				currentClass = tmp[tmp.length - 1];
 			}
-			if (!line.contains("org.evosuite.runtime"))
+			
+			if (!line.contains("o.e.r.c.ClassStateSupport"))
 				continue;
-			String status = line.substring(0, line.indexOf("org.evosuite.runtime"));
+//			System.out.println(line);
+			String status = line.substring(0, line.indexOf("o.e.r.c.ClassStateSupport"));
 			if (status.contains("ERROR")) flag = false;
 		}
 		
@@ -37,23 +41,14 @@ public class GetValidTestCasesFromLog {
 	
 	
 	public static void removeErrorTestCase() {
-		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0");
-		String targetLibrary = config.Config.targetLib;
-		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
-		String testCasePrefix = prefix + File.separator + "evosuite-tests";
-		String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + 30 + "-" + 0;
-		String invalid = testCaseDir + File.separator + "invaid";
-		File file = new File(invalid);
-		if (!file.exists()) file.mkdir();
-		for (String error : errorList) {
-			String path = testCaseDir + File.separator + error.replace(".", "/") + "*";
-			String target = invalid;
-//			TestCommandHelp.move(path, target, ",");
-		}
+		String from = "./log/generateEvosuite*";
+		String to = "./log2";
+		TestCommandHelp.move(from, to, ".");
 	}
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		removeErrorTestCase();
+//		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0.commons.lang3");
 	}
 }

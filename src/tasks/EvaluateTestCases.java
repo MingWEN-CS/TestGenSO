@@ -169,7 +169,19 @@ public class EvaluateTestCases {
 		executor.shutdown();
 	}
 	
-	
+	public boolean containsError(String output) {
+		String[] lines = output.split("\t");
+		boolean flag = false;
+		for (int i = 0; i < lines.length; i++) {
+			String line = lines[i];
+			if (!line.contains("o.e.r.c.ClassStateSupport"))
+				continue;
+//			System.out.println(line);
+			String status = line.substring(0, line.indexOf("o.e.r.c.ClassStateSupport"));
+			if (status.contains("ERROR")) flag = true;
+		}
+		return flag;
+	}
 	
 	public void getEvosuiteCoverage() {
 		String targetLibrary = config.Config.targetLib;
@@ -194,6 +206,10 @@ public class EvaluateTestCases {
 		for (int seed = seedBegin; seed <= seedEnd; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed;
+			String invalidFolder = testCasePrefix + File.separator + "invalid-" + timeLimit + "-" + seed;
+			file = new File(invalidFolder);
+			if (!file.exists())
+				file.mkdir();
 			
 			String[] dependancies = {
 				targetLibraryAndDependancy,
@@ -249,9 +265,17 @@ public class EvaluateTestCases {
 						nums = getRunningErrors(results.getKey(), classname);
 					}
 					
+					// Check whether if it contains error or not!
+					if (containsError(results.getKey())) {
+						
+						// Move to invalid test folder
+					}
+					
 				} catch (Exception e) {
 					System.out.println("Exception:\t" + e.getClass());
 				}
+				
+				
 			}
 			
 			System.out.println("Compiling JUnit test with seed :" + seed + " successfully");
