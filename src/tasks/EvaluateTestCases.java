@@ -228,8 +228,8 @@ public class EvaluateTestCases {
 				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
-				if (!classname.equals("org.apache.commons.lang3.concurrent.BasicThreadFactory_ESTest"))
-					continue;
+//				if (!classname.equals("org.apache.commons.lang3.concurrent.BasicThreadFactory_ESTest"))
+//					continue;
 				System.out.println("Running JUnit Test Cases on " + classname);
 				
 				try {
@@ -270,7 +270,7 @@ public class EvaluateTestCases {
 					testCaseDir
 				};
 			
-//			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
