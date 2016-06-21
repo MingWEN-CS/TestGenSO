@@ -234,19 +234,19 @@ public class EvaluateTestCases {
 				
 				try {
 					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
-					System.out.println("==Running standard output...==");
-					System.out.println(results.getKey());
-					System.out.println("==Running error output...==");
-					System.out.println(results.getValue());
-					List<Integer> nums = getRunningErrors(results.getValue(), classname);
+//					System.out.println("==Running standard output...==");
+//					System.out.println(results.getKey());
+//					System.out.println("==Running error output...==");
+//					System.out.println(results.getValue());
+					List<Integer> nums = getRunningErrors(results.getKey(), classname);
 					
 					while (nums.size() > 0) {
 						System.out.println("Failures at :" + nums.toString());
 						removeInvalidTestCases(relativePath, nums);
 						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
-						System.out.println(results.getValue());
-						nums = getRunningErrors(results.getValue(), classname);
+						System.out.println(results.getKey());
+						nums = getRunningErrors(results.getKey(), classname);
 					}
 					
 				} catch (Exception e) {
