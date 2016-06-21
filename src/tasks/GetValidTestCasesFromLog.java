@@ -41,7 +41,7 @@ public class GetValidTestCasesFromLog {
 	
 	
 	public static void removeErrorTestCase() {
-		String from = "./log/generateEvosuite*";
+		String from = "./log/generateEvosuiteTest";
 		String to = "./log2";
 		TestCommandHelp.move(from, to, ".");
 	}
