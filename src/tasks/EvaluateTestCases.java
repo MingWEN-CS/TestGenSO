@@ -187,7 +187,7 @@ public class EvaluateTestCases {
 		String workingPath = ".";
 		int seedBegin = config.Config.seedBegin;
 		int seedEnd = config.Config.seedEnd;
-		boolean updateData = true;
+		boolean updateData = false;
 		
 		System.out.println("Compiling JUnit Test Cases...");
 		
@@ -197,7 +197,7 @@ public class EvaluateTestCases {
 			
 			String[] dependancies = {
 				targetLibraryAndDependancy,
-				"./lib/evosuite-master-1.0.4-alpha1.jar",
+				"./lib/evosuite-1.0.2.jar",
 //				"./lib/slf4j-simple-1.6.1.jar",
 				testCaseDir
 			};
@@ -228,9 +228,15 @@ public class EvaluateTestCases {
 				String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
 				classname = classname.replace("/", ".");
 				classname = classname.substring(0, classname.length() - 5);
+				if (!classname.equals("org.apache.commons.lang3.concurrent.BasicThreadFactory_ESTest"))
+					continue;
 				System.out.println("Running JUnit Test Cases on " + classname);
+				
 				try {
 					Pair<String,String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, workingPath);
+					System.out.println("==Running standard output...==");
+					System.out.println(results.getKey());
+					System.out.println("==Running error output...==");
 					System.out.println(results.getValue());
 					List<Integer> nums = getRunningErrors(results.getValue(), classname);
 					
@@ -259,12 +265,12 @@ public class EvaluateTestCases {
 			
 			String[] dependancies2 = {
 					prefix + File.separator + targetLibrary,
-					"./lib/evosuite-master-1.0.4-alpha1.jar",
+					"./lib/evosuite-1.0.2.jar",
 //					"./lib/slf4j-simple-1.6.1.jar",
 					testCaseDir
 				};
 			
-			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
+//			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, sourceDir, excludedClasses, targetClasses, targetTests, workingPath);
 		}
 		/*
 		 * Evaluate the test cases using PiTest
@@ -307,9 +313,9 @@ public class EvaluateTestCases {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
-//		String content = FileToLines.fileToString("./runResults.txt");
-//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-		etc.getEvosuiteCoverage();
+		String content = FileToLines.fileToString("./runResults.txt");
+		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+//		etc.getEvosuiteCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
