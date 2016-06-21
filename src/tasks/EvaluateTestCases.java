@@ -266,8 +266,13 @@ public class EvaluateTestCases {
 					}
 					
 					// Check whether if it contains error or not!
+					String pathPrefix = relativePath.substring(0, relativePath.length() - 5);
 					if (containsError(results.getKey())) {
-						
+						System.out.println("== Contains Error, Remove This Test Cases ===");
+						TestCommandHelp.move(pathPrefix + ".java", invalidFolder, workingPath);
+						TestCommandHelp.move(pathPrefix + ".class", invalidFolder, workingPath);
+						TestCommandHelp.move(pathPrefix + "_scaffolding.java", invalidFolder, workingPath);
+						TestCommandHelp.move(pathPrefix + "_scaffolding.class", invalidFolder, workingPath);
 						// Move to invalid test folder
 					}
 					
