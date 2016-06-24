@@ -52,7 +52,7 @@ public class ExecCommand {
 //			}
 //			
 //			while ((line = stdError.readLine()) != null) {
-//				System.err.println(line);
+//				System.err.println(line);ls
 //				errors.append(line + "\n");
 //			}
 //			

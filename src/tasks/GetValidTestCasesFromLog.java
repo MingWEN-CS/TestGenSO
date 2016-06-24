@@ -48,7 +48,7 @@ public class GetValidTestCasesFromLog {
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
-		removeErrorTestCase();
-//		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0.commons.lang3");
+//		removeErrorTestCase();
+		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0.commons.lang3");
 	}
 }
