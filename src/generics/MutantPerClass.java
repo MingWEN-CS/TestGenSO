@@ -32,18 +32,18 @@ public class MutantPerClass {
 		int index = mutationIndex.get(mutant);
 		int statusId = 0;
 		
-		
 		/*
 		 * The Id of different status
 		 * 0: Timed_out
 		 * 1: No_Coverage
 		 * 2: Survived
-		 * 3: Killed
+		 * 3: Killed  or NON_VIABLE
 		 * 
 		 * */
+		
 		if (status.equals("NO_COVERAGE")) statusId = 1;
 		else if (status.equals("SURVIVED")) statusId = 2;
-		else if (status.equals("KILLED")) statusId = 3;
+		else if (status.equals("KILLED") || status.equals("NON_VIABLE")) statusId = 3;
 		
 		mutationStatus.put(index, statusId);
 		mutationTestCase.put(index, TestCase);
@@ -77,5 +77,15 @@ public class MutantPerClass {
 				killed++;
 		}
 		return killed * 1.0 / mutations.size();
+	}
+	
+	public void merge(MutantPerClass b) {
+		for (String mutation : mutations) {
+			if (!b.mutationIndex.containsKey(mutation)) 
+				System.err.println("Error:\t do not contain " + mutation);
+			int index = b.mutationIndex.get(mutation);
+			int status = b.mutationStatus.get(index);
+			updateMutation(mutation, status, "");
+		}
 	}
 }

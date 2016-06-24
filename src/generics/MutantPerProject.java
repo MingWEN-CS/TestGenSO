@@ -18,13 +18,27 @@ public class MutantPerProject {
 	}
 	
 	public double getMutationScore() {
-		double score = 0;
+		int killed = 0;
+		int all = 0;
 		Pair<Integer,Integer> tmp;
 		for (String classname : mutationScore.keySet()) {
 			tmp = mutationScore.get(classname).mutationScore();
-			score += tmp.getKey() * 1.0 / tmp.getValue();
+			killed += tmp.getKey();
+			all += tmp.getValue();
+//			score += mp.getKey() * 1.0 / tmp.getValue();
 		}
-		
-		return score / mutationScore.keySet().size();
+		System.out.println(killed + "\t" + all + "\t" + killed * 1.0 / all);
+		return killed * 1.0 / all;
+	}
+	
+	public void combineTestSuite(MutantPerProject b) {
+		for (String mutant : mutationScore.keySet()) {
+			MutantPerClass a = mutationScore.get(mutant);
+			if (!b.mutationScore.containsKey(mutant))
+				System.err.println("Error:\t do not contain " + mutant);
+			MutantPerClass mcp = b.mutationScore.get(mutant);
+			a.merge(mcp);
+			mutationScore.put(mutant, a);
+		}
 	}
 }

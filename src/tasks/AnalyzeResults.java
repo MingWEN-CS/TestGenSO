@@ -55,6 +55,8 @@ public class AnalyzeResults {
 						String mutantOp = tmp[1];
 						for (int i = 2; i < tmp.length - 2; i++)
 							mutantOp += " " + tmp[i];
+						mutantOp = mutantOp.replace("/", ".");
+						mutantOp = mutantOp.replace("\\", ".");
 //						System.out.println(testCase + "\t" + mutantOp + "\t" + status);
 						mpc.updateMutation(line + ":" + id + ":" + mutantOp, status, testCase);
 					} else {
@@ -79,18 +81,68 @@ public class AnalyzeResults {
 		
 		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
 		MutantPerProject evosuite = new MutantPerProject();
+		System.out.println("Getting Evosuite Results...");
 		System.out.println(reportDir);
 		for (String report : reports) {
 			if (report.endsWith("index.html")) continue;
+//			if (report.contains("com.google.common.base")) continue;
 //			System.out.println(report + "\t" + report.indexOf(reportDir));
 			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
 //			System.out.println(classname);
 			MutantPerClass mpc = getMutationScoreOf(report);
-			System.out.println(classname + "\t" + mpc.getMutationScore());
+//			System.out.println(classname + "\t" + mpc.getMutationScore());
+			classname = classname.replace("\\", ".");
+			classname = classname.replace("/", ".");
 			evosuite.addClass(classname, mpc);
 		}
-		
 		System.out.println(evosuite.getMutationScore());
+		
+		System.out.println("Getting Randoop Results...");
+		reportDirPrefix = prefix + File.separator + "randoop-reports";
+		reportDate = "201606151422";
+		reportDir = reportDirPrefix + File.separator + "report-2" + File.separator + reportDate;
+		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		MutantPerProject randoop = new MutantPerProject();
+		System.out.println(reportDir);
+		for (String report : reports) {
+			if (report.endsWith("index.html")) continue;
+//			if (report.contains("com.google.common.base")) continue;
+//			System.out.println(report + "\t" + report.indexOf(reportDir));
+			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+//			System.out.println(classname);
+			MutantPerClass mpc = getMutationScoreOf(report);
+//			System.out.println(classname + "\t" + mpc.getMutationScore());
+			classname = classname.replace("\\", ".");
+			classname = classname.replace("/", ".");
+			randoop.addClass(classname, mpc);
+		}
+		System.out.println(randoop.getMutationScore());
+		
+		System.out.println("Getting TestSO Results...");
+		reportDirPrefix = prefix + File.separator + "testSO-reports";
+		reportDate = "201606162039";
+		reportDir = reportDirPrefix + File.separator + "report-0" + File.separator + reportDate;
+		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		MutantPerProject testSO = new MutantPerProject();
+		System.out.println(reportDir);
+		for (String report : reports) {
+			if (report.endsWith("index.html")) continue;
+//			if (report.contains("com.google.common.base")) continue;
+//			System.out.println(report + "\t" + report.indexOf(reportDir));
+			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+//			System.out.println(classname);
+			MutantPerClass mpc = getMutationScoreOf(report);
+//			System.out.println(classname + "\t" + mpc.getMutationScore());
+			classname = classname.replace("\\", ".");
+			classname = classname.replace("/", ".");
+			testSO.addClass(classname, mpc);
+		}
+		System.out.println(testSO.getMutationScore());
+		
+
+		testSO.combineTestSuite(randoop);
+		
+		System.out.println(testSO.getMutationScore());
 	}
 	
 	public static void main(String[] args) {
