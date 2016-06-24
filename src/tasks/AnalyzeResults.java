@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import config.ParsingArguments;
 import generics.MutantPerClass;
 import utils.FileToLines;
 import utils.Pair;
@@ -63,8 +64,14 @@ public class AnalyzeResults {
 		System.out.println(ms.getKey() + "\t" + ms.getValue() + "\t" + ms.getKey() * 1.0 / ms.getValue());
 	}
 	
+	public static void compareMutationScore() {
+		
+	}
+	
 	public static void main(String[] args) {
-		String filename = "./report/201606090926/org.apache.commons.math3.analysis/FunctionUtils.java.html";
-		getMutationScoreOf(filename);
+		ParsingArguments.parsingArguments(args);
+		compareMutationScore();
+//		String filename = "./report/201606090926/org.apache.commons.math3.analysis/FunctionUtils.java.html";
+//		getMutationScoreOf(filename);
 	}
 }
