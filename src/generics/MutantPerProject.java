@@ -25,6 +25,6 @@ public class MutantPerProject {
 			score += tmp.getKey() * 1.0 / tmp.getValue();
 		}
 		
-		return score / mutationScore.size();
+		return score / mutationScore.keySet().size();
 	}
 }

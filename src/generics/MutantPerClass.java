@@ -69,4 +69,13 @@ public class MutantPerClass {
 		}
 		return new Pair<Integer,Integer>(killed, mutations.size());
 	}
+	
+	public double getMutationScore() {
+		int killed = 0;
+		for (int index : mutationStatus.keySet()) {
+			if (mutationStatus.get(index) == 3)
+				killed++;
+		}
+		return killed * 1.0 / mutations.size();
+	}
 }

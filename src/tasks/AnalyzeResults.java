@@ -1,5 +1,8 @@
 package tasks;
 
+import java.io.File;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,17 +10,19 @@ import org.jsoup.select.Elements;
 
 import config.ParsingArguments;
 import generics.MutantPerClass;
+import generics.MutantPerProject;
+import utils.FileListUnderDirectory;
 import utils.FileToLines;
 import utils.Pair;
 
 public class AnalyzeResults {
 	
-	public static void getMutationScoreOf(String filename) {
+	public static MutantPerClass getMutationScoreOf(String filename) {
 		String content = FileToLines.fileToString(filename);
 		
 		Document doc = Jsoup.parse(content);
 		Elements mutants = doc.select("tr");
-		System.out.println(mutants.size());
+//		System.out.println(mutants.size());
 		MutantPerClass mpc = new MutantPerClass();
 		int count = 0;
 		for (Element mutant : mutants) {
@@ -59,13 +64,33 @@ public class AnalyzeResults {
 			} 
 //			System.out.println(mutant.toString());
 		}
-		System.out.println(count);
-		Pair<Integer,Integer> ms = mpc.mutationScore();
-		System.out.println(ms.getKey() + "\t" + ms.getValue() + "\t" + ms.getKey() * 1.0 / ms.getValue());
+//		System.out.println(count);
+//		Pair<Integer,Integer> ms = mpc.mutationScore();
+//		System.out.println(ms.getKey() + "\t" + ms.getValue() + "\t" + ms.getKey() * 1.0 / ms.getValue());
+		return mpc;
 	}
 	
 	public static void compareMutationScore() {
+		String targetLibrary = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
+		String reportDate = "201606201511";
+		String reportDir = reportDirPrefix + File.separator + "report-0" + File.separator + reportDate;
 		
+		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		MutantPerProject evosuite = new MutantPerProject();
+		System.out.println(reportDir);
+		for (String report : reports) {
+			if (report.endsWith("index.html")) continue;
+//			System.out.println(report + "\t" + report.indexOf(reportDir));
+			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+//			System.out.println(classname);
+			MutantPerClass mpc = getMutationScoreOf(report);
+			System.out.println(classname + "\t" + mpc.getMutationScore());
+			evosuite.addClass(classname, mpc);
+		}
+		
+		System.out.println(evosuite.getMutationScore());
 	}
 	
 	public static void main(String[] args) {
