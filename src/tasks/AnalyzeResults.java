@@ -46,7 +46,7 @@ public class AnalyzeResults {
 						for (int i = 2; i < tmp.length; i++)
 							info += tmp[i];
 //						info = tmp[2].trim();
-						tmp = info.split(" ");
+						tmp = info.trim().split(" ");
 						String status = tmp[tmp.length - 1];
 						String testCase = "";
 						if (status.equals("KILLED")) {
@@ -139,10 +139,10 @@ public class AnalyzeResults {
 		}
 		System.out.println(testSO.getMutationScore());
 		
-
-		testSO.combineTestSuite(randoop);
-		
-		System.out.println(testSO.getMutationScore());
+		randoop.combineTestSuite(testSO);
+//		testSO.combineTestSuite(randoop);
+//		testSO.combineTestSuite(evosuite);
+		System.out.println(randoop.getMutationScore());
 	}
 	
 	public static void main(String[] args) {

@@ -34,9 +34,11 @@ public class MutantPerProject {
 	public void combineTestSuite(MutantPerProject b) {
 		for (String mutant : mutationScore.keySet()) {
 			MutantPerClass a = mutationScore.get(mutant);
+			
 			if (!b.mutationScore.containsKey(mutant))
 				System.err.println("Error:\t do not contain " + mutant);
 			MutantPerClass mcp = b.mutationScore.get(mutant);
+			System.out.println(mutant);
 			a.merge(mcp);
 			mutationScore.put(mutant, a);
 		}

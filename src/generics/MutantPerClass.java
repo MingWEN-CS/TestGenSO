@@ -81,6 +81,7 @@ public class MutantPerClass {
 	
 	public void merge(MutantPerClass b) {
 		for (String mutation : mutations) {
+			System.out.println(mutations.size() + "\t" + b.mutations.size());
 			if (!b.mutationIndex.containsKey(mutation)) 
 				System.err.println("Error:\t do not contain " + mutation);
 			int index = b.mutationIndex.get(mutation);
