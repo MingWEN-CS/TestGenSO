@@ -109,10 +109,11 @@ public class AnalyzeResults {
 			for (String report : reports) {
 				
 				if (report.endsWith("index.html")) continue;
-//				System.out.println(report);
+				System.out.println(report);
 				reportDate = report.substring(report.indexOf("_ESTest") + 8);
+				System.out.println(reportDate);
 				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
-//				System.out.println(reportDate);
+				System.out.println(reportDate);
 //				if (report.contains("com.google.common.base")) continue;
 //				System.out.println(report + "\t" + report.indexOf(reportDir));
 				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
