@@ -19,7 +19,7 @@ import utils.WriteLinesToFile;
 
 public class EvaluateTestCases {
 	
-	private List<Integer> getCompilingErrors(String results, String relativePath) {
+	public static List<Integer> getCompilingErrors(String results, String relativePath) {
 		List<Integer> lineNumbers = new ArrayList<Integer>();
 		System.out.println("== get compiling errors == ");
 		System.out.println(results);
@@ -38,7 +38,7 @@ public class EvaluateTestCases {
 		return lineNumbers;
 	}
 	
-	private List<Integer> getRunningErrors(String results, String className) {
+	public static List<Integer> getRunningErrors(String results, String className) {
 		List<Integer> lineNumbers = new ArrayList<Integer>();
 		String regex = className + "\\." + "test" + "(\\d)+\\(";
 		System.out.println(className);
@@ -55,7 +55,7 @@ public class EvaluateTestCases {
 	}
 	
 	
-	private int withInRange(List<Pair<Integer,Integer>> ranges, int line) {
+	public static int withInRange(List<Pair<Integer,Integer>> ranges, int line) {
 		for (int i = 0; i < ranges.size(); i++) {
 			Pair<Integer,Integer> range = ranges.get(i);			
 			if (range.getKey() <= line && range.getValue() >= line) return i;
@@ -63,7 +63,7 @@ public class EvaluateTestCases {
 		return -1;
 	}
 	
-	private void removeInvalidTestCases(String relativePath, List<Integer> nums) {
+	public static void removeInvalidTestCases(String relativePath, List<Integer> nums) {
 		List<String> lines = FileToLines.fileToLines(relativePath);
 		List<Pair<Integer,Integer>> testRange = new ArrayList<Pair<Integer,Integer>>();
 		for (int num : nums) {
@@ -92,7 +92,7 @@ public class EvaluateTestCases {
 			
 	}
 	
-	private void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String dependancy, int timeLimit) {
+	private static void removeInvalidAndCompileJUnitTestCases(String testCasePrefix, String targetLibrary, String dependancy, int timeLimit) {
 		for (int seed = 1; seed < 10; seed++) {
 			String testCaseDir = testCasePrefix + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			List<String> files = FileListUnderDirectory.getFileListUnder(testCaseDir, ".java");
@@ -339,10 +339,59 @@ public class EvaluateTestCases {
 		
 	}
 	
-	public void fixEvosuiteInvalidTestCases(int seed) {
+	public void fixEvosuiteInvalidTestCases() {
 		String logFile = "./log2/evaluateEvosuite.seed.0.google-collections";
 		String errorPattern = "org.evosuite.runtime.classhandling.ClassStateSupport";
 		List<String> buggyClasses = GetValidTestCasesFromLog.getErrorList(logFile, errorPattern);
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		for (String buggyClass : buggyClasses) {
+			Runnable work = new fixEvosuiteInvalidTestCase(buggyClass, 0);
+			executor.execute(work);
+		}
+		executor.shutdown();
+	}
+	
+	public static void main(String[] args) {
+		ParsingArguments.parsingArguments(args);
+		EvaluateTestCases etc = new EvaluateTestCases(); 
+//		String content = FileToLines.fileToString("./runResults.txt");
+//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
+		etc.fixEvosuiteInvalidTestCases();
+//		test();
+//		List<Integer> tmp = new ArrayList<Integer>();
+//		tmp.add(61);
+//		tmp.add(37);
+//		etc.removeInvalidTestCases("RegressionTest1.java", tmp);
+//		String filename = "RegressionTest1.java";
+//		List<String> lines = FileToLines.fileToLines(filename);
+//		int target = 61;
+//		int current = target;
+//		while (!lines.get(current).trim().equals("@Test")) {
+//			System.out.println(lines.get(current));
+//			current--;
+//		}
+//		System.out.println(current);
+//		List<String> after = new ArrayList<String>();
+//		for (int i = 0; i < lines.size(); i++)
+//			if (i == current) 
+//				after.add("// " + lines.get(i));
+//			else after.add(lines.get(i));
+//		
+//		WriteLinesToFile.writeLinesToFile(after, filename);
+	}
+}
+class fixEvosuiteInvalidTestCase implements Runnable {
+	String buggyClass;
+	int seed;
+	
+	public fixEvosuiteInvalidTestCase(String buggyClass, int seed) {
+		this.buggyClass = buggyClass;
+		this.seed = seed;
+	}
+	
+	@Override
+	public void run() {
+
 		
 		String libName = config.Config.targetLib;
 		String prefix = config.Config.targetLibraryDir + File.separator + libName;
@@ -372,75 +421,45 @@ public class EvaluateTestCases {
 			};
 		
 		
-		for (String buggyClass : buggyClasses) {
-			System.out.println("Handling class :" + buggyClass);
-			System.out.println("=== Generating Test Case ===");
-			String classname = buggyClass.substring(0, buggyClass.indexOf("_ESTest"));
-			
-			TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, classname, seed, timeLimit, outputDir, workingPath);
-			
-			System.out.println("=== Compiling JUnit Test Case ===");
-			String relativePath = outputDir + File.separator + buggyClass.replace(".", File.separator) + ".java";
-			Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
-			
-			List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
-			
-			while (nums.size() > 0) {
-				removeInvalidTestCases(relativePath, nums);
-				result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
-				nums = getCompilingErrors(result.getValue(), relativePath);
-			}
-			
-			System.out.println("=== Running JUnit Test Case ===");
-			result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
-			
-			nums = getRunningErrors(result.getKey(), classname);
-			
-			while (nums.size() > 0) {
-				System.out.println("Failures at :" + nums.toString());
-				removeInvalidTestCases(relativePath, nums);
-				TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
-				result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
-				System.out.println(result.getKey());
-				nums = getRunningErrors(result.getKey(), classname);
-			}
-			
-			String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass;
-			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, "", excludedClasses, targetClasses, buggyClass, workingPath);
-			
-			break;
+		
+		System.out.println("Handling class :" + buggyClass);
+		System.out.println("=== Generating Test Case ===");
+		String classname = buggyClass.substring(0, buggyClass.indexOf("_ESTest"));
+		
+		TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, classname, seed, timeLimit, outputDir, workingPath);
+		
+		System.out.println("=== Compiling JUnit Test Case ===");
+		String relativePath = outputDir + File.separator + buggyClass.replace(".", File.separator) + ".java";
+		Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+		
+		List<Integer> nums = EvaluateTestCases.getCompilingErrors(result.getValue(), relativePath);
+		
+		while (nums.size() > 0) {
+			EvaluateTestCases.removeInvalidTestCases(relativePath, nums);
+			result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+			nums = EvaluateTestCases.getCompilingErrors(result.getValue(), relativePath);
 		}
-	}
-	
-	public static void main(String[] args) {
-		ParsingArguments.parsingArguments(args);
-		EvaluateTestCases etc = new EvaluateTestCases(); 
-//		String content = FileToLines.fileToString("./runResults.txt");
-//		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-		etc.fixEvosuiteInvalidTestCases(0);
-//		test();
-//		List<Integer> tmp = new ArrayList<Integer>();
-//		tmp.add(61);
-//		tmp.add(37);
-//		etc.removeInvalidTestCases("RegressionTest1.java", tmp);
-//		String filename = "RegressionTest1.java";
-//		List<String> lines = FileToLines.fileToLines(filename);
-//		int target = 61;
-//		int current = target;
-//		while (!lines.get(current).trim().equals("@Test")) {
-//			System.out.println(lines.get(current));
-//			current--;
-//		}
-//		System.out.println(current);
-//		List<String> after = new ArrayList<String>();
-//		for (int i = 0; i < lines.size(); i++)
-//			if (i == current) 
-//				after.add("// " + lines.get(i));
-//			else after.add(lines.get(i));
-//		
-//		WriteLinesToFile.writeLinesToFile(after, filename);
+		
+		System.out.println("=== Running JUnit Test Case ===");
+		result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
+		
+		nums = EvaluateTestCases.getRunningErrors(result.getKey(), classname);
+		
+		while (nums.size() > 0) {
+			System.out.println("Failures at :" + nums.toString());
+			EvaluateTestCases.removeInvalidTestCases(relativePath, nums);
+			TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+			result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
+			System.out.println(result.getKey());
+			nums = EvaluateTestCases.getRunningErrors(result.getKey(), classname);
+		}
+		
+		String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass;
+		TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, "", excludedClasses, targetClasses, buggyClass, workingPath);
 	}
 }
+
+
 
 class runPiTestRandoopPerSeed implements Runnable {
 	String[] dependancies;
