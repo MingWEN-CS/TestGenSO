@@ -175,6 +175,7 @@ public class AnalyzeResults {
 		System.out.println(testSO.getMutationScore());
 		
 		System.out.println("Randoop + Evosuite");
+		
 		MutantPerProject tmp1 = new MutantPerProject();
 		tmp1.combineTestSuite(evosuite);
 		tmp1.combineTestSuite(randoop);
@@ -194,9 +195,12 @@ public class AnalyzeResults {
 		
 //		randoop.combineTestSuite(testSO);
 		System.out.println("Randoop + Evosuite + TestSO");
-		testSO.combineTestSuite(randoop);
-		testSO.combineTestSuite(evosuite);
-		System.out.println(testSO.getMutationScore());
+		
+		MutantPerProject tmp4 = new MutantPerProject();
+		tmp4.combineTestSuite(testSO);
+		tmp4.combineTestSuite(randoop);
+		tmp4.combineTestSuite(evosuite);
+		System.out.println(tmp4.getMutationScore());
 		
 
 		
