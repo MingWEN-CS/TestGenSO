@@ -102,10 +102,17 @@ public class AnalyzeResults {
 		for (File file : files) {
 			if (!file.getName().endsWith("_ESTest")) continue;
 			System.out.println(file.getName());
+			
 			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
 			MutantPerProject testClass = new MutantPerProject();
+			
 			for (String report : reports) {
+				
 				if (report.endsWith("index.html")) continue;
+//				System.out.println(report);
+				reportDate = report.substring(report.indexOf("_ESTest") + 8);
+				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
+//				System.out.println(reportDate);
 //				if (report.contains("com.google.common.base")) continue;
 //				System.out.println(report + "\t" + report.indexOf(reportDir));
 				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
@@ -164,9 +171,9 @@ public class AnalyzeResults {
 		}
 		System.out.println(testSO.getMutationScore());
 		
-		randoop.combineTestSuite(testSO);
-//		testSO.combineTestSuite(randoop);
-//		testSO.combineTestSuite(evosuite);
+//		randoop.combineTestSuite(testSO);
+		testSO.combineTestSuite(randoop);
+		testSO.combineTestSuite(evosuite);
 		System.out.println(randoop.getMutationScore());
 	}
 	
