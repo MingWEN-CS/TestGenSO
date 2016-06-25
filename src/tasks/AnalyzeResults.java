@@ -174,11 +174,32 @@ public class AnalyzeResults {
 		}
 		System.out.println(testSO.getMutationScore());
 		
+		System.out.println("Randoop + Evosuite");
+		MutantPerProject tmp1 = new MutantPerProject();
+		tmp1.combineTestSuite(evosuite);
+		tmp1.combineTestSuite(randoop);
+		System.out.println(tmp1.getMutationScore());
+		
+		System.out.println("Randoop + TestSO");
+		MutantPerProject tmp2 = new MutantPerProject();
+		tmp2.combineTestSuite(testSO);
+		tmp2.combineTestSuite(randoop);
+		System.out.println(tmp2.getMutationScore());
+		
+		System.out.println("Evosuite + TestSO");
+		MutantPerProject tmp3 = new MutantPerProject();
+		tmp3.combineTestSuite(testSO);
+		tmp3.combineTestSuite(evosuite);
+		System.out.println(tmp3.getMutationScore());
+		
 //		randoop.combineTestSuite(testSO);
-		System.out.println("Combining Results...");
+		System.out.println("Randoop + Evosuite + TestSO");
 		testSO.combineTestSuite(randoop);
 		testSO.combineTestSuite(evosuite);
 		System.out.println(testSO.getMutationScore());
+		
+
+		
 	}
 	
 	public static void main(String[] args) {
