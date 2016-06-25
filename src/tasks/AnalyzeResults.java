@@ -102,19 +102,20 @@ public class AnalyzeResults {
 		System.out.println("Invalid Test Cases Length\t" + files.length);
 		for (File file : files) {
 			if (!file.getName().endsWith("_ESTest")) continue;
-			System.out.println(file.getName());
+//			System.out.println(file.getName());
 			
 			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
 			MutantPerProject testClass = new MutantPerProject();
-			System.out.println("report size:\t" + reports.size());
+//			System.out.println("report size:\t" + reports.size());
+			if (reports.size() == 0) continue;
 			for (String report : reports) {
-				System.out.println(report);
+//				System.out.println(report);
 				if (report.endsWith("index.html")) continue;
-				System.out.println(report);
+//				System.out.println(report);
 				reportDate = report.substring(report.indexOf("_ESTest") + 8);
-				System.out.println(reportDate);
+//				System.out.println(reportDate);
 				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
-				System.out.println(reportDate);
+//				System.out.println(reportDate);
 //				if (report.contains("com.google.common.base")) continue;
 //				System.out.println(report + "\t" + report.indexOf(reportDir));
 				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
