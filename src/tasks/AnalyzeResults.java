@@ -77,9 +77,9 @@ public class AnalyzeResults {
 		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
 		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
 		String reportDate = "201606201511";
-		String reportDir = reportDirPrefix + File.separator + "report-0" + File.separator + reportDate;
+		String reportDir = reportDirPrefix + File.separator + "report-0";
 		
-		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir + File.separator + reportDate, ".html");
 		MutantPerProject evosuite = new MutantPerProject();
 		System.out.println("Getting Evosuite Results...");
 		System.out.println(reportDir);
@@ -95,6 +95,31 @@ public class AnalyzeResults {
 			classname = classname.replace("/", ".");
 			evosuite.addClass(classname, mpc);
 		}
+		System.out.println(evosuite.getMutationScore());
+		
+		System.out.println("Adding other test cases...");
+		File[] files = new File(reportDir).listFiles();
+		for (File file : files) {
+			if (!file.getName().endsWith("_ESTest")) continue;
+			System.out.println(file.getName());
+			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
+			MutantPerProject testClass = new MutantPerProject();
+			for (String report : reports) {
+				if (report.endsWith("index.html")) continue;
+//				if (report.contains("com.google.common.base")) continue;
+//				System.out.println(report + "\t" + report.indexOf(reportDir));
+				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+//				System.out.println(classname);
+				MutantPerClass mpc = getMutationScoreOf(report);
+//				System.out.println(classname + "\t" + mpc.getMutationScore());
+				classname = classname.replace("\\", ".");
+				classname = classname.replace("/", ".");
+				testClass.addClass(classname, mpc);
+			}
+			
+			evosuite.combineTestSuite(testClass);
+		}
+		System.out.println("After combining...");
 		System.out.println(evosuite.getMutationScore());
 		
 		System.out.println("Getting Randoop Results...");
