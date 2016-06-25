@@ -10,7 +10,7 @@ import utils.TestCommandHelp;
 
 public class GetValidTestCasesFromLog {
 	
-	public static List<String> getErrorList(String file) {
+	public static List<String> getErrorList(String file, String pattern) {
 		List<String> filenames = new ArrayList<String>();
 		List<String> lines = FileToLines.fileToLines(file);
 		String currentClass = "";
@@ -26,10 +26,10 @@ public class GetValidTestCasesFromLog {
 				currentClass = tmp[tmp.length - 1];
 			}
 			
-			if (!line.contains("o.e.r.c.ClassStateSupport"))
+			if (!line.contains(pattern))
 				continue;
 //			System.out.println(line);
-			String status = line.substring(0, line.indexOf("o.e.r.c.ClassStateSupport"));
+			String status = line.substring(0, line.indexOf(pattern));
 			if (status.contains("ERROR")) flag = false;
 		}
 		
@@ -49,6 +49,6 @@ public class GetValidTestCasesFromLog {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 //		removeErrorTestCase();
-		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0.commons.lang3");
+		List<String> errorList = getErrorList("./log/evaluateEvosuite.seed.0", "org.evosuite.runtime.classhandling.ClassStateSupport");
 	}
 }

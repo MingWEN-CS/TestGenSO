@@ -339,12 +339,64 @@ public class EvaluateTestCases {
 		
 	}
 	
+	public void fixEvosuiteInvalidTestCases(int seed) {
+		String logFile = "./log2/evaluateEvosuite.seed.0.google-collections";
+		String errorPattern = "org.evosuite.runtime.classhandling.ClassStateSupport";
+		List<String> buggyClasses = GetValidTestCasesFromLog.getErrorList(logFile, errorPattern);
+		
+		String libName = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + libName;
+		String libPath = prefix + File.separator + "lib" + File.separator + libName + ".jar";
+//		String targetLibraryAndDependancy = combineAllFileNameWithSemiColon(prefix + File.separator + "lib");
+		String targetLibraryAndDependancy = libPath;
+		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
+		String targetClasses = config.Config.libToPackage.get(libName) + "*";
+		String excludedClasses = config.Config.libToPackage.get(libName) + "*_ESTest_scaffolding";
+		
+		int timeLimit = 30;
+		String workingPath = ".";
+		String testCaseDir = prefix + File.separator + "evosuite-tests";
+		String outputDir = testCaseDir + File.separator + "evosuite-tests-" + timeLimit + "-" + seed;
+		String[] dependancies = {
+				targetLibraryAndDependancy,
+				"./lib/evosuite-1.0.2.jar",
+//				"./lib/slf4j-simple-1.6.1.jar",
+				outputDir
+			};
+		
+		String[] dependancies2 = {
+				prefix + File.separator + libName,
+				"./lib/evosuite-1.0.2.jar",
+//				"./lib/slf4j-simple-1.6.1.jar",
+				outputDir
+			};
+		
+		
+		for (String buggyClass : buggyClasses) {
+			System.out.println("Handling class :" + buggyClass);
+			System.out.println("=== Generating Test Case ===");
+			TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, buggyClass.substring(0, buggyClass.indexOf("_ESTest")), seed, timeLimit, outputDir, workingPath);
+			
+			System.out.println("=== Compiling JUnit Test Case ===");
+			String relativePath = outputDir + File.separator + buggyClass.replace(".", File.separator) + ".java";
+			TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+			
+			System.out.println("=== Running JUnit Test Case ===");
+			TestCommandHelp.runJUnitTestCases("java", dependancies, "", outputDir, workingPath);
+			
+			String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass;
+			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, "", excludedClasses, targetClasses, buggyClass, workingPath);
+			
+			break;
+		}
+	}
+	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		EvaluateTestCases etc = new EvaluateTestCases(); 
 //		String content = FileToLines.fileToString("./runResults.txt");
 //		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-		etc.getEvosuiteCoverage();
+		etc.fixEvosuiteInvalidTestCases(0);
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
