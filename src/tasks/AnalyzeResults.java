@@ -175,9 +175,10 @@ public class AnalyzeResults {
 		System.out.println(testSO.getMutationScore());
 		
 //		randoop.combineTestSuite(testSO);
+		System.out.println("Combining Results...");
 		testSO.combineTestSuite(randoop);
 		testSO.combineTestSuite(evosuite);
-		System.out.println(randoop.getMutationScore());
+		System.out.println(testSO.getMutationScore());
 	}
 	
 	public static void main(String[] args) {

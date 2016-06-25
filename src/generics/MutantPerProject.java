@@ -38,7 +38,7 @@ public class MutantPerProject {
 			if (!b.mutationScore.containsKey(mutant))
 				System.err.println("Error:\t do not contain " + mutant);
 			MutantPerClass mcp = b.mutationScore.get(mutant);
-			System.out.println(mutant);
+//			System.out.println(mutant);
 			a.merge(mcp);
 			mutationScore.put(mutant, a);
 		}
