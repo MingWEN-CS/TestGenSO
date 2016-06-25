@@ -34,7 +34,7 @@ public class MutantPerProject {
 	public void combineTestSuite(MutantPerProject b) {
 		if (mutationScore.size() == 0) {
 			for (String mutant : b.mutationScore.keySet()) {
-				mutationScore.put(mutant, b.mutationScore.get(mutant));
+				mutationScore.put(mutant, new MutantPerClass(b.mutationScore.get(mutant)));
 			}
 		} 
 		else {

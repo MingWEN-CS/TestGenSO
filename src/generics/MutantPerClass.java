@@ -20,6 +20,12 @@ public class MutantPerClass {
 		
 	}
 	
+	public MutantPerClass(MutantPerClass b) {
+		mutations = new HashSet<String>(b.mutations);
+		mutationIndex = new HashMap<String,Integer>(b.mutationIndex);
+		mutationStatus = new HashMap<Integer,Integer>(b.mutationStatus);
+		mutationTestCase = new HashMap<Integer,String>(b.mutationTestCase); 
+	}
 	
 	public void updateMutation(String mutant, String status, String TestCase) {
 		if (!mutations.contains(mutant)) {
@@ -37,7 +43,7 @@ public class MutantPerClass {
 		 * 0: Timed_out
 		 * 1: No_Coverage
 		 * 2: Survived
-		 * 3: Killed  or NON_VIABLE
+		 * 3: Killed or NON_VIABLE
 		 * 
 		 * */
 		
@@ -57,7 +63,7 @@ public class MutantPerClass {
 		
 		int index = mutationIndex.get(mutant);
 		if (!mutationStatus.containsKey(index) || status > mutationStatus.get(index)) mutationStatus.put(index, status);
-		if (TestCase.equals(""))
+		if (mutationTestCase.get(index).equals(""))
 			mutationTestCase.put(index, TestCase);
 	}
 	
