@@ -375,14 +375,35 @@ public class EvaluateTestCases {
 		for (String buggyClass : buggyClasses) {
 			System.out.println("Handling class :" + buggyClass);
 			System.out.println("=== Generating Test Case ===");
-			TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, buggyClass.substring(0, buggyClass.indexOf("_ESTest")), seed, timeLimit, outputDir, workingPath);
+			String classname = buggyClass.substring(0, buggyClass.indexOf("_ESTest"));
+			
+			TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, classname, seed, timeLimit, outputDir, workingPath);
 			
 			System.out.println("=== Compiling JUnit Test Case ===");
 			String relativePath = outputDir + File.separator + buggyClass.replace(".", File.separator) + ".java";
-			TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+			Pair<String,String> result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+			
+			List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
+			
+			while (nums.size() > 0) {
+				removeInvalidTestCases(relativePath, nums);
+				result = TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+				nums = getCompilingErrors(result.getValue(), relativePath);
+			}
 			
 			System.out.println("=== Running JUnit Test Case ===");
-			TestCommandHelp.runJUnitTestCases("java", dependancies, "", outputDir, workingPath);
+			result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
+			
+			nums = getRunningErrors(result.getKey(), classname);
+			
+			while (nums.size() > 0) {
+				System.out.println("Failures at :" + nums.toString());
+				removeInvalidTestCases(relativePath, nums);
+				TestCommandHelp.compileJUnitTestCases("javac", libName, outputDir, dependancies, relativePath, ".");
+				result = TestCommandHelp.runJUnitTestCases("java", dependancies, "", buggyClass, workingPath);
+				System.out.println(result.getKey());
+				nums = getRunningErrors(result.getKey(), classname);
+			}
 			
 			String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass;
 			TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, "", excludedClasses, targetClasses, buggyClass, workingPath);

@@ -254,6 +254,7 @@ public class TestCommandHelp {
 				targetLibrary,
 				"-seed",
 				"" + seed,
+				"-Dtest_dir=" + outputDir,
 				"-Dsearch_budget=" + timeLimit,
 				"-Dstopping_condition=MaxTime"
 		};
