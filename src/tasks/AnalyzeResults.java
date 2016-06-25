@@ -99,15 +99,16 @@ public class AnalyzeResults {
 		
 		System.out.println("Adding other test cases...");
 		File[] files = new File(reportDir).listFiles();
+		System.out.println("Invalid Test Cases Length\t" + files.length);
 		for (File file : files) {
 			if (!file.getName().endsWith("_ESTest")) continue;
 			System.out.println(file.getName());
 			
 			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
 			MutantPerProject testClass = new MutantPerProject();
-			
+			System.out.println("report size:\t" + reports.size());
 			for (String report : reports) {
-				
+				System.out.println(report);
 				if (report.endsWith("index.html")) continue;
 				System.out.println(report);
 				reportDate = report.substring(report.indexOf("_ESTest") + 8);
