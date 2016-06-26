@@ -120,6 +120,9 @@ public class EvaluateTestCases {
 					classname = classname.substring(0, classname.length() - 5);
 					
 					Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");
+					System.out.println(results.getKey());
+					System.out.println("Buggy Information");
+					System.out.println(results.getValue());
 					nums = getRunningErrors(results.getKey(), classname);
 					
 					while (nums.size() > 0) {
@@ -127,6 +130,7 @@ public class EvaluateTestCases {
 						removeInvalidTestCases(relativePath, nums);
 						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
 						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, ".");
+						
 						System.out.println(results.getKey());
 						nums = getRunningErrors(results.getKey(), classname);
 					}
