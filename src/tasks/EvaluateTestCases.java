@@ -125,6 +125,9 @@ public class EvaluateTestCases {
 			// Compiling the entry point test cases
 			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
 			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
+			
+			Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, "RegressionTest", "");
+			System.out.println(results.getKey());
 			System.out.println("== Compiling the test suite:" + seed + " successfully ==");
 		}	
 	}
