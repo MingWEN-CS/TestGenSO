@@ -32,7 +32,9 @@ public class GenerateTestCases {
 		if (!file.exists())
 			file.mkdir();
 		ExecutorService executor = Executors.newFixedThreadPool(10);
-		for (int seed = 0; seed < 10; seed++) {
+		int seedBegin = config.Config.seedBegin;
+		int seedEnd = config.Config.seedEnd;
+		for (int seed = seedBegin; seed < seedEnd; seed++) {
 			String outputDir = testCaseDir + File.separator + "randoop-tests-" + timeLimit + "-" + seed;
 			file = new File(outputDir);
 			if (!file.exists())
