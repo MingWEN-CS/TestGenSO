@@ -37,6 +37,8 @@ public class ExecCommand {
 		Pair<String,String> result = null;
 		try {
 			File dir = new File(workingpath);
+			System.out.println("Running Commands");
+			System.out.println(dir);
 			Process process = Runtime.getRuntime().exec(commands, null, dir);
 			
 			s1 = new ReadStream("stdin",process.getInputStream());

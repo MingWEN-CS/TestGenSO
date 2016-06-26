@@ -119,27 +119,30 @@ public class EvaluateTestCases {
 					String classname = relativePath.substring(testCaseDir.length() + 1);
 					classname = classname.substring(0, classname.length() - 5);
 					
-					Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");
-					System.out.println(results.getKey());
-					System.out.println("Buggy Information");
-					System.out.println(results.getValue());
-					nums = getRunningErrors(results.getKey(), classname);
+					try {
 					
-					while (nums.size() > 0) {
-						System.out.println("Failures at :" + nums.toString());
-						removeInvalidTestCases(relativePath, nums);
-						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
-						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, ".");
-						
-						System.out.println(results.getKey());
+						Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");
 						nums = getRunningErrors(results.getKey(), classname);
+						
+						while (nums.size() > 0) {
+							System.out.println("Failures at :" + nums.toString());
+							removeInvalidTestCases(relativePath, nums);
+							TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+							results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, ".");
+							
+							System.out.println(results.getKey());
+							nums = getRunningErrors(results.getKey(), classname);
+						}
+						
+	//					while (nums.size() > 0) {
+	//						removeInvalidTestCases(relativePath, nums);
+	//						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
+	//						nums = getCompilingErrors(result.getValue(), relativePath);
+	//					}
 					}
-					
-//					while (nums.size() > 0) {
-//						removeInvalidTestCases(relativePath, nums);
-//						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
-//						nums = getCompilingErrors(result.getValue(), relativePath);
-//					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
