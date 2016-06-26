@@ -350,14 +350,12 @@ public class EvaluateTestCases {
 		String[] dependancy1 = {
 				"./lib/*",
 				"./test/",
-				"./bin"
 		};
 		
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy1, classname, workingPath);
 		String[] dependancy2 = {
 				"./lib2/*",
 				"./test/",
-				"./bin",
 				targetLibrary
 		};
 		
