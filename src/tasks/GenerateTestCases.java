@@ -79,7 +79,11 @@ public class GenerateTestCases {
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
-		generateEvosuiteTestCases();
+		String option = config.Config.option;
+		if (option.equals("Evosuite"))
+			generateEvosuiteTestCases();
+		else if (option.equals("Randoop"))
+			generateRandoopTestCases();
 	}
 }
 

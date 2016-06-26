@@ -7,6 +7,7 @@ public class ParsingArguments {
 		String pro = config.Config.targetLib;
 		int begin = config.Config.seedBegin;
 		int end = config.Config.seedEnd;
+		String option = config.Config.option;
 		
 		if (args.length == 0) {
 			showHelp();
@@ -22,12 +23,17 @@ public class ParsingArguments {
 				if (args[i].equals("-seedEnd")) {
 					end = Integer.parseInt(args[++i]);
 				}
+				if (args[i].equals("-o")) {
+					option = args[++i];
+				}
 				i++;
 			}			
 		}
 		
 		if (pro.length() > 0)
 			config.Config.targetLib = pro;
+		if (option.length() > 0)
+			config.Config.option = option;
 		config.Config.seedBegin = begin;
 		config.Config.seedEnd = end;
 //		if (pro.equals("Ant") || pro.equals("ElasticSearch") || pro.equals("Lucene")) global.Parameters.VERSION = "";

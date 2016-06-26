@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Config {
 	
 	public static String targetLib = "google-collections-1.0";
+	public static String option = "TestSO";
 	public static int randoopTimeLimit = 180;
 	public static int evosuiteTimeLimit = 30;
 	public static int seedBegin = 0;

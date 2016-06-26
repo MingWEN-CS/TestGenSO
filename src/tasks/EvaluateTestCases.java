@@ -356,7 +356,15 @@ public class EvaluateTestCases {
 		EvaluateTestCases etc = new EvaluateTestCases(); 
 //		String content = FileToLines.fileToString("./runResults.txt");
 //		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
-		etc.fixEvosuiteInvalidTestCases();
+		String option = config.Config.option;
+		
+		if (option.equals("Evosuite")) {
+			etc.getEvosuiteCoverage();
+			etc.fixEvosuiteInvalidTestCases();
+		} else if (option.equals("Randoop"))
+			etc.getRandoopCoverage();
+		else if (option.equals("TestSO"))
+			etc.getTestSOCoverage();
 //		test();
 //		List<Integer> tmp = new ArrayList<Integer>();
 //		tmp.add(61);
