@@ -114,6 +114,23 @@ public class EvaluateTestCases {
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
 					if (nums.size() > 0)
 						removeInvalidTestCases(relativePath, nums);
+					
+					String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
+					classname = classname.replace("/", ".");
+					classname = classname.substring(0, classname.length() - 5);
+					
+					Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");
+					nums = getRunningErrors(results.getKey(), classname);
+					
+					while (nums.size() > 0) {
+						System.out.println("Failures at :" + nums.toString());
+						removeInvalidTestCases(relativePath, nums);
+						TestCommandHelp.compileJUnitTestCases("javac", targetLibrary, testCaseDir, dependancies, relativePath, ".");
+						results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, ".");
+						System.out.println(results.getKey());
+						nums = getRunningErrors(results.getKey(), classname);
+					}
+					
 //					while (nums.size() > 0) {
 //						removeInvalidTestCases(relativePath, nums);
 //						result = TestCommandHelp.compileJUnitTestCases(targetLibrary, testCaseDir, dependancies, relativePath, ".");
@@ -125,9 +142,6 @@ public class EvaluateTestCases {
 			// Compiling the entry point test cases
 			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryRegressionTest, ".");
 			TestCommandHelp.compileJUnitTestCases("javac",targetLibrary, testCaseDir, dependancies, entryErrorTest, ".");
-			
-			Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, "RegressionTest", "");
-			System.out.println(results.getKey());
 			System.out.println("== Compiling the test suite:" + seed + " successfully ==");
 		}	
 	}
