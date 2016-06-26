@@ -114,9 +114,9 @@ public class EvaluateTestCases {
 					List<Integer> nums = getCompilingErrors(result.getValue(), relativePath);
 					if (nums.size() > 0)
 						removeInvalidTestCases(relativePath, nums);
-					
-					String classname = relativePath.substring(relativePath.indexOf(config.Config.libToPackage.get(targetLibrary).replace(".", "/")));
-					classname = classname.replace("/", ".");
+					System.out.println("Test Case Path...");
+					System.out.println(relativePath);
+					String classname = relativePath.substring(testCaseDir.length() + 1);
 					classname = classname.substring(0, classname.length() - 5);
 					
 					Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");

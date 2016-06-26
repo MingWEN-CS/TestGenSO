@@ -10,7 +10,7 @@ public class Config {
 	public static int randoopTimeLimit = 180;
 	public static int evosuiteTimeLimit = 30;
 	public static int seedBegin = 0;
-	public static int seedEnd = 0;
+	public static int seedEnd = 1;
 	public static final String targetLibraryDir = "../TargetLibraries";
 	
 	public static HashMap<String,String> libToPackage = new HashMap<String,String>();
