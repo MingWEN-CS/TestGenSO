@@ -70,7 +70,7 @@ public class EvaluateTestCases {
 			int begin = num;
 			int end = num;
 			while (!lines.get(begin).contains("@Test")) begin--;
-			while (end < lines.size() && !lines.get(end).contains("@Test")) end++;
+			while (end < lines.size() - 1 && !lines.get(end).contains("@Test")) end++;
 			testRange.add(new Pair<Integer,Integer>(begin, end - 1));
 			System.out.println("== Test Case Range: " + begin + " " + (end - 1));
 		}
