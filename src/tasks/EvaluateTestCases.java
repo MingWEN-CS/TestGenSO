@@ -121,7 +121,7 @@ public class EvaluateTestCases {
 					
 					try {
 					
-						Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, "");
+						Pair<String, String> results = TestCommandHelp.runJUnitTestCases("java", dependancies, testCaseDir, classname, ".");
 						nums = getRunningErrors(results.getKey(), classname);
 						
 						while (nums.size() > 0) {
