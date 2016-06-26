@@ -62,6 +62,7 @@ public class ExecCommand {
 //			stdError.close();
 			result = new Pair<String,String>(s1.output,s2.output);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.err.println("Error:" + e.getClass());
 			return result;
 		}
