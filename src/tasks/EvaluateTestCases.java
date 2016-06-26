@@ -343,7 +343,7 @@ public class EvaluateTestCases {
 		File file = new File(reportDir);
 		if (!file.exists()) file.mkdir();
 		
-		String classname = "test.TestSuiteSO";
+		String classname = "sotestgen.TestSuiteSO";
 		String workingPath = prefix;
 		String sourceDir = ".";
 		
