@@ -369,8 +369,8 @@ public class EvaluateTestCases {
 	}
 	
 	public void fixEvosuiteInvalidTestCases() {
-		String logFile = "./log2/evaluateEvosuite.seed.0.google-collections";
-		String errorPattern = "org.evosuite.runtime.classhandling.ClassStateSupport";
+		String logFile = "./log2/evaluateEvosuite.seed.0.commons.lang3";
+		String errorPattern = "o.e.r.c.ClassStateSupport";
 		List<String> buggyClasses = GetValidTestCasesFromLog.getErrorList(logFile, errorPattern);
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		for (String buggyClass : buggyClasses) {
@@ -388,7 +388,7 @@ public class EvaluateTestCases {
 		String option = config.Config.option;
 		
 		if (option.equals("Evosuite")) {
-			etc.getEvosuiteCoverage();
+//			etc.getEvosuiteCoverage();
 			etc.fixEvosuiteInvalidTestCases();
 		} else if (option.equals("Randoop"))
 			etc.getRandoopCoverage();
