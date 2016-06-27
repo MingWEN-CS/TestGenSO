@@ -114,6 +114,8 @@ public class AnalyzeResults {
 //				System.out.println(report);
 				reportDate = report.substring(report.indexOf("_ESTest") + 8);
 //				System.out.println(reportDate);
+				reportDate = reportDate.replace("\\", ".");
+				reportDate = reportDate.replace("/", ".");
 				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
 //				System.out.println(reportDate);
 //				if (report.contains("com.google.common.base")) continue;
@@ -135,7 +137,7 @@ public class AnalyzeResults {
 		System.out.println("Getting Randoop Results...");
 		reportDirPrefix = prefix + File.separator + "randoop-reports";
 		reportDate = "201606262044";
-		reportDir = reportDirPrefix + File.separator + "report-2" + File.separator + reportDate;
+		reportDir = reportDirPrefix + File.separator + "report-0" + File.separator + reportDate;
 		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
 		MutantPerProject randoop = new MutantPerProject();
 		System.out.println(reportDir);
