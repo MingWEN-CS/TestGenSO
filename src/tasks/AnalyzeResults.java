@@ -76,7 +76,7 @@ public class AnalyzeResults {
 		String targetLibrary = config.Config.targetLib;
 		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
 		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
-		String reportDate = "201606201511";
+		String reportDate = "201606211119";
 		String reportDir = reportDirPrefix + File.separator + "report-0";
 		
 		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir + File.separator + reportDate, ".html");
@@ -134,7 +134,7 @@ public class AnalyzeResults {
 		
 		System.out.println("Getting Randoop Results...");
 		reportDirPrefix = prefix + File.separator + "randoop-reports";
-		reportDate = "201606151422";
+		reportDate = "201606262044";
 		reportDir = reportDirPrefix + File.separator + "report-2" + File.separator + reportDate;
 		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
 		MutantPerProject randoop = new MutantPerProject();
@@ -155,7 +155,7 @@ public class AnalyzeResults {
 		
 		System.out.println("Getting TestSO Results...");
 		reportDirPrefix = prefix + File.separator + "testSO-reports";
-		reportDate = "201606162039";
+		reportDate = "201606262351";
 		reportDir = reportDirPrefix + File.separator + reportDate;
 		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
 		MutantPerProject testSO = new MutantPerProject();
