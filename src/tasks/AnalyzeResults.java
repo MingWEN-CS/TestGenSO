@@ -243,7 +243,7 @@ public class AnalyzeResults {
 			classname = classname.substring(0, classname.length() - 5);
 			evosuite.addClass(classname, mpc);
 		}
-		System.out.println(evosuite.getMutationScore(null));
+		System.out.println(evosuite.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Adding other test cases...");
 		File[] files = new File(evosuiteDir).listFiles();
@@ -280,7 +280,7 @@ public class AnalyzeResults {
 			evosuite.combineTestSuite(testClass);
 		}
 		System.out.println("After combining...");
-		System.out.println(evosuite.getMutationScore(null));
+		System.out.println(evosuite.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Getting Randoop Results...");
 		System.out.println(randoopDir + File.separator + randoopDate);
@@ -300,7 +300,7 @@ public class AnalyzeResults {
 			classname = classname.substring(0, classname.length() - 5);
 			randoop.addClass(classname, mpc);
 		}
-		System.out.println(randoop.getMutationScore(null));
+		System.out.println(randoop.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Getting TestSO Results...");
 		reports = FileListUnderDirectory.getFileListUnder(testSODir, ".html");
