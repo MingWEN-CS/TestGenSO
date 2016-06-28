@@ -19,23 +19,23 @@ import utils.Pair;
 
 public class AnalyzeResults {
 	
-	public static String targetLibrary = config.Config.targetLib;
-	public static  String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+	public String targetLibrary = config.Config.targetLib;
+	public String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
 	
-	public static String evosuiteDirPrefix = prefix + File.separator + "evosuite-reports";
-	public static String evosuiteDate = "201606211119";
-	public static String evosuiteDir = evosuiteDirPrefix + File.separator + "report-0";
+	public String evosuiteDirPrefix = prefix + File.separator + "evosuite-reports";
+	public String evosuiteDate = "201606211119";
+	public String evosuiteDir = evosuiteDirPrefix + File.separator + "report-0";
 	
-	public static String randoopDirPrefix = prefix + File.separator + "randoop-reports";
-	public static String randoopDate = "201606262044";
-	public static String randoopDir = randoopDirPrefix + File.separator + "report-0";
+	public String randoopDirPrefix = prefix + File.separator + "randoop-reports";
+	public String randoopDate = "201606262044";
+	public String randoopDir = randoopDirPrefix + File.separator + "report-0";
 	
-	public static String testSODirPrefix = prefix + File.separator + "testSO-reports";
-	public static String testSODate = "201606262351";
-	public static String testSODir = testSODirPrefix + File.separator + testSODate;
+	public String testSODirPrefix = prefix + File.separator + "testSO-reports";
+	public String testSODate = "201606262351";
+	public String testSODir = testSODirPrefix + File.separator + testSODate;
 
 	
-	public static MutantPerClass getMutationScoreOf(String filename) {
+	public MutantPerClass getMutationScoreOf(String filename) {
 		String content = FileToLines.fileToString(filename);
 		
 		Document doc = Jsoup.parse(content);
@@ -90,7 +90,7 @@ public class AnalyzeResults {
 		return mpc;
 	}
 	
-	public static HashSet<String> getNoCoveragePackage(String filename) {
+	public HashSet<String> getNoCoveragePackage(String filename) {
 		HashSet<String> classnames = new HashSet<String>();
 		String content = FileToLines.fileToString(filename);
 		Document doc = Jsoup.parse(content);
@@ -119,7 +119,7 @@ public class AnalyzeResults {
 		return classnames;
 	}
 	
-	public static HashSet<String> getNoCoverageClass() {
+	public HashSet<String> getNoCoverageClass() {
 		HashSet<String> classnames = new HashSet<String>();
 		
 		HashSet<String> evosuite = new HashSet<String>();
@@ -223,7 +223,7 @@ public class AnalyzeResults {
 		return classnames;
 	}
 	
-	public static void compareMutationScore() {		
+	public void compareMutationScore() {		
 		System.out.println(evosuiteDir + File.separator + evosuiteDate);
 		List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
 		MutantPerProject evosuite = new MutantPerProject();
@@ -352,7 +352,8 @@ public class AnalyzeResults {
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
-		compareMutationScore();
+		AnalyzeResults ar = new AnalyzeResults();
+		ar.compareMutationScore();
 //		getNoCoverageClass();
 //		String filename = "./report/201606090926/org.apache.commons.math3.analysis/FunctionUtils.java.html";
 //		getMutationScoreOf(filename);
