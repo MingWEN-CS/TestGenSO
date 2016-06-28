@@ -23,15 +23,15 @@ public class AnalyzeResults {
 	public String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
 	
 	public String evosuiteDirPrefix = prefix + File.separator + "evosuite-reports";
-	public String evosuiteDate = "201606211119";
+	public String evosuiteDate = "201606201511";
 	public String evosuiteDir = evosuiteDirPrefix + File.separator + "report-0";
 	
 	public String randoopDirPrefix = prefix + File.separator + "randoop-reports";
-	public String randoopDate = "201606262044";
+	public String randoopDate = "201606162039";
 	public String randoopDir = randoopDirPrefix + File.separator + "report-0";
 	
 	public String testSODirPrefix = prefix + File.separator + "testSO-reports";
-	public String testSODate = "201606262351";
+	public String testSODate = "201606162039";
 	public String testSODir = testSODirPrefix + File.separator + testSODate;
 
 	
