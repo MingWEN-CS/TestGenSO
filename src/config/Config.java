@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Config {
 	
-	public static String targetLib = "google-collections-1.0";
+	public static String targetLib = "commons-lang3-3.4";
 	public static String option = "TestSO";
 	public static int randoopTimeLimit = 180;
 	public static int evosuiteTimeLimit = 30;

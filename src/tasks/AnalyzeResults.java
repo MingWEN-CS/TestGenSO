@@ -1,6 +1,8 @@
 package tasks;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -16,6 +18,22 @@ import utils.FileToLines;
 import utils.Pair;
 
 public class AnalyzeResults {
+	
+	public static String targetLibrary = config.Config.targetLib;
+	public static  String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+	
+	public static String evosuiteDirPrefix = prefix + File.separator + "evosuite-reports";
+	public static String evosuiteDate = "201606211119";
+	public static String evosuiteDir = evosuiteDirPrefix + File.separator + "report-0";
+	
+	public static String randoopDirPrefix = prefix + File.separator + "randoop-reports";
+	public static String randoopDate = "201606262044";
+	public static String randoopDir = randoopDirPrefix + File.separator + "report-0";
+	
+	public static String testSODirPrefix = prefix + File.separator + "testSO-reports";
+	public static String testSODate = "201606262351";
+	public static String testSODir = testSODirPrefix + File.separator + testSODate;
+
 	
 	public static MutantPerClass getMutationScoreOf(String filename) {
 		String content = FileToLines.fileToString(filename);
@@ -72,38 +90,163 @@ public class AnalyzeResults {
 		return mpc;
 	}
 	
-	public static void compareMutationScore() {
-		String targetLibrary = config.Config.targetLib;
-		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
-		String reportDirPrefix = prefix + File.separator + "evosuite-reports";
-		String reportDate = "201606211119";
-		String reportDir = reportDirPrefix + File.separator + "report-0";
+	public static HashSet<String> getNoCoveragePackage(String filename) {
+		HashSet<String> classnames = new HashSet<String>();
+		String content = FileToLines.fileToString(filename);
+		Document doc = Jsoup.parse(content);
+		Elements tables = doc.select("table");
 		
-		List<String> reports = FileListUnderDirectory.getFileListUnder(reportDir + File.separator + reportDate, ".html");
+		if (tables.size() != 2)
+			System.err.println("Error:\t Table size do not match!" );
+		Element table = tables.get(1);
+		String classname = "";
+		int coverage = 0;
+		
+		Elements tbody = table.select("tbody");
+		Elements tds = tbody.get(0).select("td");
+		for (int i = 0; i < tds.size(); i++) {
+			if (i % 3 == 0) {
+				classname = tds.get(i).text().trim();
+			} else if (i % 3 == 1) {
+				coverage = Integer.parseInt(tds.get(i).text().split("%")[0]);
+				if (coverage == 0)
+					classnames.add(classname);
+			}
+		}
+			
+		
+		
+		return classnames;
+	}
+	
+	public static HashSet<String> getNoCoverageClass() {
+		HashSet<String> classnames = new HashSet<String>();
+		
+		HashSet<String> evosuite = new HashSet<String>();
+		List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, "index.html");
+		for (String report : reports) {
+			String packagename = report.replace("\\", ".");
+			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+			HashSet<String> tmp = getNoCoveragePackage(report);
+//			System.out.println(packagename);
+			for (String tmp1 : tmp) {
+				evosuite.add(packagename + tmp1); 
+			}
+		}
+		
+		System.out.println("Evosuite Size:\t" + evosuite.size());
+		System.out.println("Adding other test cases...");
+		File[] files = new File(evosuiteDir).listFiles();
+		System.out.println("Invalid Test Cases Length\t" + files.length);
+		
+		HashSet<String> nonEmpty = new HashSet<String>();
+		for (File file : files) {
+			if (!file.getName().endsWith("_ESTest")) continue;
+//			System.out.println(file.getName());
+			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), "index.html");
+			HashSet<String> fullnames = new HashSet<String>();
+			for (String report : reports) {
+				
+//				System.out.println(report);
+				String reportDate = report.substring(report.indexOf("_ESTest") + 8);
+				reportDate = reportDate.replace("\\", ".");
+				reportDate = reportDate.replace("/", ".");
+				if (!reportDate.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
+//				System.out.println(reportDate);
+//				if (report.contains("com.google.common.base")) continue;
+//				System.out.println(report + "\t" + report.indexOf(reportDir));
+//				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+				String packagename = report.replace("\\", ".");
+				packagename = packagename.substring(packagename.indexOf(reportDate) + reportDate.length());
+//				System.out.println(packagename);
+				if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+				packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+				System.out.println(packagename);
+				HashSet<String> names = getNoCoveragePackage(report);
+				for (String name : names) fullnames.add(packagename + name); 
+			}
+			
+			System.out.println(fullnames.toString());
+			for (String empty : evosuite) {
+				if (!fullnames.contains(empty))
+					nonEmpty.add(empty);
+			}
+		}
+		
+		evosuite.removeAll(nonEmpty);
+		
+		System.out.println("Evosuite Size:\t" + evosuite.size());
+		
+		HashSet<String> randoop = new HashSet<String>();
+		reports = FileListUnderDirectory.getFileListUnder(randoopDir + File.separator + randoopDate, "index.html");
+		for (String report : reports) {
+			String packagename = report.replace("\\", ".");
+			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+			HashSet<String> tmp = getNoCoveragePackage(report);
+//			System.out.println(packagename);
+			for (String tmp1 : tmp) {
+				randoop.add(packagename + tmp1); 
+			}
+		}
+
+		System.out.println("Randoop Size:\t" + randoop.size());
+		
+		HashSet<String> testSO = new HashSet<String>();
+		reports = FileListUnderDirectory.getFileListUnder(testSODir, "index.html");
+		for (String report : reports) {
+			String packagename = report.replace("\\", ".");
+			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+			HashSet<String> tmp = getNoCoveragePackage(report);
+//			System.out.println(packagename);
+			for (String tmp1 : tmp) {
+				testSO.add(packagename + tmp1); 
+			}
+		}
+		
+		System.out.println("TestSO size:\t" + testSO.size());
+		
+		System.out.println(evosuite.toString());
+		System.out.println(randoop.toString());
+		System.out.println(testSO.toString());
+		classnames.addAll(evosuite);
+		classnames.addAll(randoop);
+		classnames.addAll(testSO);
+		System.out.println("All Size:\t" + classnames.size());
+		return classnames;
+	}
+	
+	public static void compareMutationScore() {		
+		System.out.println(evosuiteDir + File.separator + evosuiteDate);
+		List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
 		MutantPerProject evosuite = new MutantPerProject();
 		System.out.println("Getting Evosuite Results...");
-		System.out.println(reportDir);
+//		System.out.println(reportDir);
+		HashSet<String> noCoverageClasses = getNoCoverageClass();
 		for (String report : reports) {
 			if (report.endsWith("index.html")) continue;
 //			if (report.contains("com.google.common.base")) continue;
 //			System.out.println(report + "\t" + report.indexOf(reportDir));
-			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+			String classname = report.substring(report.indexOf(evosuiteDate) + evosuiteDate.length() + 1);
 //			System.out.println(classname);
 			MutantPerClass mpc = getMutationScoreOf(report);
 //			System.out.println(classname + "\t" + mpc.getMutationScore());
 			classname = classname.replace("\\", ".");
 			classname = classname.replace("/", ".");
+			classname = classname.substring(0, classname.length() - 5);
 			evosuite.addClass(classname, mpc);
 		}
-		System.out.println(evosuite.getMutationScore());
+		System.out.println(evosuite.getMutationScore(null));
 		
 		System.out.println("Adding other test cases...");
-		File[] files = new File(reportDir).listFiles();
+		File[] files = new File(evosuiteDir).listFiles();
 		System.out.println("Invalid Test Cases Length\t" + files.length);
 		for (File file : files) {
 			if (!file.getName().endsWith("_ESTest")) continue;
 //			System.out.println(file.getName());
-			
 			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
 			MutantPerProject testClass = new MutantPerProject();
 //			System.out.println("report size:\t" + reports.size());
@@ -112,7 +255,7 @@ public class AnalyzeResults {
 //				System.out.println(report);
 				if (report.endsWith("index.html")) continue;
 //				System.out.println(report);
-				reportDate = report.substring(report.indexOf("_ESTest") + 8);
+				String reportDate = report.substring(report.indexOf("_ESTest") + 8);
 //				System.out.println(reportDate);
 				reportDate = reportDate.replace("\\", ".");
 				reportDate = reportDate.replace("/", ".");
@@ -126,75 +269,72 @@ public class AnalyzeResults {
 //				System.out.println(classname + "\t" + mpc.getMutationScore());
 				classname = classname.replace("\\", ".");
 				classname = classname.replace("/", ".");
+				classname = classname.substring(0, classname.length() - 5);
 				testClass.addClass(classname, mpc);
 			}
 			
 			evosuite.combineTestSuite(testClass);
 		}
 		System.out.println("After combining...");
-		System.out.println(evosuite.getMutationScore());
+		System.out.println(evosuite.getMutationScore(null));
 		
 		System.out.println("Getting Randoop Results...");
-		reportDirPrefix = prefix + File.separator + "randoop-reports";
-		reportDate = "201606262044";
-		reportDir = reportDirPrefix + File.separator + "report-0" + File.separator + reportDate;
-		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		System.out.println(randoopDir + File.separator + randoopDate);
+		reports = FileListUnderDirectory.getFileListUnder(randoopDir + File.separator + randoopDate, ".html");
 		MutantPerProject randoop = new MutantPerProject();
-		System.out.println(reportDir);
+		
 		for (String report : reports) {
 			if (report.endsWith("index.html")) continue;
 //			if (report.contains("com.google.common.base")) continue;
 //			System.out.println(report + "\t" + report.indexOf(reportDir));
-			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+			String classname = report.substring(report.indexOf(randoopDate) + randoopDate.length() + 1);
 //			System.out.println(classname);
 			MutantPerClass mpc = getMutationScoreOf(report);
 //			System.out.println(classname + "\t" + mpc.getMutationScore());
 			classname = classname.replace("\\", ".");
 			classname = classname.replace("/", ".");
+			classname = classname.substring(0, classname.length() - 5);
 			randoop.addClass(classname, mpc);
 		}
-		System.out.println(randoop.getMutationScore());
+		System.out.println(randoop.getMutationScore(null));
 		
 		System.out.println("Getting TestSO Results...");
-		reportDirPrefix = prefix + File.separator + "testSO-reports";
-		reportDate = "201606262351";
-		
-		reportDir = reportDirPrefix + File.separator + reportDate;
-		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
+		reports = FileListUnderDirectory.getFileListUnder(testSODir, ".html");
 		MutantPerProject testSO = new MutantPerProject();
-		System.out.println(reportDir);
+		System.out.println(testSO);
 		for (String report : reports) {
 			if (report.endsWith("index.html")) continue;
 //			if (report.contains("com.google.common.base")) continue;
 //			System.out.println(report + "\t" + report.indexOf(reportDir));
-			String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+			String classname = report.substring(report.indexOf(testSODate) + testSODate.length() + 1);
 //			System.out.println(classname);
 			MutantPerClass mpc = getMutationScoreOf(report);
 //			System.out.println(classname + "\t" + mpc.getMutationScore());
 			classname = classname.replace("\\", ".");
 			classname = classname.replace("/", ".");
+			classname = classname.substring(0, classname.length() - 5);
 			testSO.addClass(classname, mpc);
 		}
-		System.out.println(testSO.getMutationScore());
+		System.out.println(testSO.getMutationScore(null));
 		
 		System.out.println("Randoop + Evosuite");
 		
 		MutantPerProject tmp1 = new MutantPerProject();
 		tmp1.combineTestSuite(evosuite);
 		tmp1.combineTestSuite(randoop);
-		System.out.println(tmp1.getMutationScore());
+		System.out.println(tmp1.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Randoop + TestSO");
 		MutantPerProject tmp2 = new MutantPerProject();
 		tmp2.combineTestSuite(testSO);
 		tmp2.combineTestSuite(randoop);
-		System.out.println(tmp2.getMutationScore());
+		System.out.println(tmp2.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Evosuite + TestSO");
 		MutantPerProject tmp3 = new MutantPerProject();
 		tmp3.combineTestSuite(testSO);
 		tmp3.combineTestSuite(evosuite);
-		System.out.println(tmp3.getMutationScore());
+		System.out.println(tmp3.getMutationScore(noCoverageClasses));
 		
 //		randoop.combineTestSuite(testSO);
 		System.out.println("Randoop + Evosuite + TestSO");
@@ -203,15 +343,13 @@ public class AnalyzeResults {
 		tmp4.combineTestSuite(testSO);
 		tmp4.combineTestSuite(randoop);
 		tmp4.combineTestSuite(evosuite);
-		System.out.println(tmp4.getMutationScore());
-		
-
-		
+		System.out.println(tmp4.getMutationScore(noCoverageClasses));
 	}
 	
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		compareMutationScore();
+//		getNoCoverageClass();
 //		String filename = "./report/201606090926/org.apache.commons.math3.analysis/FunctionUtils.java.html";
 //		getMutationScoreOf(filename);
 	}

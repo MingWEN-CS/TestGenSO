@@ -1,6 +1,7 @@
 package generics;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import utils.Pair;
 
@@ -17,11 +18,12 @@ public class MutantPerProject {
 		mutationScore.put(classname, mpc);
 	}
 	
-	public double getMutationScore() {
+	public double getMutationScore(HashSet<String> classes) {
 		int killed = 0;
 		int all = 0;
 		Pair<Integer,Integer> tmp;
 		for (String classname : mutationScore.keySet()) {
+			if (classes != null && classes.contains(classname)) continue;
 			tmp = mutationScore.get(classname).mutationScore();
 			killed += tmp.getKey();
 			all += tmp.getValue();
