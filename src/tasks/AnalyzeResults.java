@@ -319,7 +319,7 @@ public class AnalyzeResults {
 			classname = classname.substring(0, classname.length() - 5);
 			testSO.addClass(classname, mpc);
 		}
-		System.out.println(testSO.getMutationScore(null));
+		System.out.println(testSO.getMutationScore(noCoverageClasses));
 		
 		System.out.println("Randoop + Evosuite");
 		
