@@ -158,6 +158,7 @@ public class AnalyzeResults {
 		System.out.println("Getting TestSO Results...");
 		reportDirPrefix = prefix + File.separator + "testSO-reports";
 		reportDate = "201606262351";
+		
 		reportDir = reportDirPrefix + File.separator + reportDate;
 		reports = FileListUnderDirectory.getFileListUnder(reportDir, ".html");
 		MutantPerProject testSO = new MutantPerProject();
