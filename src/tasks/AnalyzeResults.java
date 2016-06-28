@@ -213,9 +213,9 @@ public class AnalyzeResults {
 		
 		System.out.println("TestSO size:\t" + testSO.size());
 		
-//		System.out.println(evosuite.toString());
-//		System.out.println(randoop.toString());
-//		System.out.println(testSO.toString());
+		System.out.println(evosuite.toString());
+		System.out.println(randoop.toString());
+		System.out.println(testSO.toString());
 		classnames.addAll(evosuite);
 		classnames.addAll(randoop);
 		classnames.addAll(testSO);
