@@ -482,8 +482,7 @@ class fixEvosuiteInvalidTestCase implements Runnable {
 		
 		System.out.println("Handling class :" + buggyClass);
 		System.out.println("=== Generating Test Case ===");
-		String classname = buggyClass.substring(0, buggyClass.indexOf("_ESTest"));
-		
+		String classname = buggyClass;
 		TestCommandHelp.generateEvosuiteTestCasesForAClass(libPath, classname, seed, timeLimit, outputDir, workingPath);
 		
 		System.out.println("=== Compiling JUnit Test Case ===");
