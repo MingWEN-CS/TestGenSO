@@ -203,10 +203,13 @@ public class EvaluateTestCases {
 		boolean flag = false;
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-			if (!line.contains("org.evosuite.runtime.classhandling.ClassStateSupport"))
+			if (!(line.contains("org.evosuite.runtime.classhandling.ClassStateSupport") || line.contains("o.e.r.c.ClassStateSupport")))
 				continue;
 //			System.out.println(line);
-			String status = line.substring(0, line.indexOf("org.evosuite.runtime.classhandling.ClassStateSupport"));
+			String status = "";
+			if (line.contains("o.e.r.c.ClassStateSupport"))
+				status = line.substring(0, line.indexOf("o.e.r.c.ClassStateSupport"));
+			else status	= line.substring(0, line.indexOf("org.evosuite.runtime.classhandling.ClassStateSupport"));
 			if (status.contains("ERROR")) flag = true;
 		}
 		return flag;
