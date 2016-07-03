@@ -203,10 +203,10 @@ public class EvaluateTestCases {
 		boolean flag = false;
 		for (int i = 0; i < lines.length; i++) {
 			String line = lines[i];
-			if (!line.contains("o.e.r.c.ClassStateSupport"))
+			if (!line.contains("org.evosuite.runtime.classhandling.ClassStateSupport"))
 				continue;
 //			System.out.println(line);
-			String status = line.substring(0, line.indexOf("o.e.r.c.ClassStateSupport"));
+			String status = line.substring(0, line.indexOf("org.evosuite.runtime.classhandling.ClassStateSupport"));
 			if (status.contains("ERROR")) flag = true;
 		}
 		return flag;
@@ -298,10 +298,10 @@ public class EvaluateTestCases {
 					String pathPrefix = relativePath.substring(0, relativePath.length() - 5);
 					if (containsError(results.getKey())) {
 						System.out.println("== Contains Error, Remove This Test Cases ===");
-						TestCommandHelp.move(pathPrefix + ".java", invalidFolder, workingPath);
-						TestCommandHelp.move(pathPrefix + ".class", invalidFolder, workingPath);
-						TestCommandHelp.move(pathPrefix + "_scaffolding.java", invalidFolder, workingPath);
-						TestCommandHelp.move(pathPrefix + "_scaffolding.class", invalidFolder, workingPath);
+						TestCommandHelp.move(pathPrefix + ".java", invalidFolder + File.separator + classname + ".java", workingPath);
+						TestCommandHelp.move(pathPrefix + ".class", invalidFolder + File.separator + classname + ".class", workingPath);
+						TestCommandHelp.move(pathPrefix + "_scaffolding.java", invalidFolder + File.separator + classname + "_scaffolding.java", workingPath);
+						TestCommandHelp.move(pathPrefix + "_scaffolding.class", invalidFolder + File.separator + classname + "_scaffolding.class", workingPath);
 						// Move to invalid test folder
 					}
 					
@@ -389,7 +389,7 @@ public class EvaluateTestCases {
 		
 		if (option.equals("Evosuite")) {
 //			etc.getEvosuiteCoverage();
-			etc.fixEvosuiteInvalidTestCases();
+			etc.getEvosuiteCoverage();
 		} else if (option.equals("Randoop"))
 			etc.getRandoopCoverage();
 		else if (option.equals("TestSO"))
