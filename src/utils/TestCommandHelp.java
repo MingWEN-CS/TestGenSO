@@ -144,6 +144,30 @@ public class TestCommandHelp {
 		return result;
 	}
 	
+	public static Pair<String,String> compileJUnitTestCasesLocally(
+			String command,
+			String[] dependancies,
+			String testPath,
+			String workingPath) {
+		
+		String requiredFiles = "";
+		for (String dependancy : dependancies) {
+			requiredFiles += ":" + dependancy;
+		}
+		
+		String[] commands = {
+				command,
+				"-cp",
+				"../../TestGenSO/lib/junit-4.12.jar:../../TestGenSO/lib/hamcrest-all-1.3.jar" + requiredFiles,
+				testPath
+		};
+		
+		printCommands(commands);
+		ExecCommand executor = new ExecCommand();
+		Pair<String,String> result = executor.execOneThread(commands, ".");
+		return result;
+	}
+	
 	public static Pair<String,String> runJUnitTestCases(
 			String command,
 			String[] dependancies,

@@ -21,7 +21,7 @@ public class Config {
 		libToPackage.put("commons-lang3-3.4", "org.apache.commons.lang3.");
 		libToPackage.put("joda-time-2.9.4", "org.joda.time.");
 		libToPackage.put("gson-2.6.2", "com.google.gson.");
-		libToPackage.put("gson-2.6.2", "com.google.gson.");
+		libToPackage.put("guava-19.0", "com.google.common.");
 		libToPackage.put("stanford-corenlp-3.6.0", "edu.stanford.nlp.");
 	}
 	

@@ -354,7 +354,7 @@ public class EvaluateTestCases {
 				"./lib/*",
 				"./test/",
 		};
-		
+		TestCommandHelp.compileJUnitTestCasesLocally("java", dependancy1, "./test/sotestgen/TestSuiteSO.java", workingPath);
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy1, classname, workingPath);
 		String[] dependancy2 = {
 				"./lib2/*",
