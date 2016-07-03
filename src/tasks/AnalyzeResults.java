@@ -35,6 +35,25 @@ public class AnalyzeResults {
 	public String testSODir = testSODirPrefix + File.separator + testSODate;
 
 	
+	public void readSettingFile() {
+		List<String> lines = FileToLines.fileToLines(prefix + File.separator + "evaluateConfig");
+		if (lines.size() < 3) 
+			System.err.println("Setting Error");
+		String line = lines.get(0);
+		String[] tmp = line.split(":");
+		evosuiteDir = evosuiteDirPrefix + File.separator + "report-" + tmp[1];
+		evosuiteDate = tmp[2];
+		
+		line = lines.get(1);
+		tmp = line.split(":");
+		randoopDir = randoopDirPrefix + File.separator + "report-" + tmp[1];
+		randoopDate = tmp[2];
+		
+		line = lines.get(2);
+		tmp = line.split(":");
+		testSODate = tmp[1];
+	}
+	
 	public MutantPerClass getMutationScoreOf(String filename) {
 		String content = FileToLines.fileToString(filename);
 		
@@ -353,6 +372,7 @@ public class AnalyzeResults {
 	public static void main(String[] args) {
 		ParsingArguments.parsingArguments(args);
 		AnalyzeResults ar = new AnalyzeResults();
+		ar.readSettingFile();
 		ar.compareMutationScore();
 //		getNoCoverageClass();
 //		String filename = "./report/201606090926/org.apache.commons.math3.analysis/FunctionUtils.java.html";

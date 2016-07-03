@@ -365,7 +365,18 @@ public class EvaluateTestCases {
 				targetLibrary
 		};
 		
-		TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
+		Pair<String, String> results = TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
+		List<Integer> nums = getRunningErrors(results.getKey(), classname);
+		
+		while (nums.size() > 0) {
+			System.out.println("Failures at :" + nums.toString());
+			removeInvalidTestCases(workingPath + filePath, nums);
+			TestCommandHelp.compileJUnitTestCasesLocally("javac", dependancy1, filePath, workingPath);
+			results = TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
+			System.out.println(results.getKey());
+			nums = getRunningErrors(results.getKey(), classname);
+		}
+		
 		String targetClasses = config.Config.libToPackage.get(targetLibrary) + "*";
 		
 		System.out.println("== Running PiTest ==");
