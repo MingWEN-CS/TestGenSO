@@ -164,7 +164,7 @@ public class TestCommandHelp {
 		
 		printCommands(commands);
 		ExecCommand executor = new ExecCommand();
-		Pair<String,String> result = executor.execOneThread(commands, ".");
+		Pair<String,String> result = executor.execOneThread(commands, workingPath);
 		return result;
 	}
 	

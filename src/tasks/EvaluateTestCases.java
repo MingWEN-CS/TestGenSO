@@ -354,7 +354,10 @@ public class EvaluateTestCases {
 				"./lib/*",
 				"./test/",
 		};
-		TestCommandHelp.compileJUnitTestCasesLocally("javac", dependancy1, "./test/sotestgen/TestSuiteSO.java", workingPath);
+		
+		String filePath = "." + File.separator + "test" + File.separator + "sotestgen" + File.separator + "TestSuiteSO.java";
+		TestCommandHelp.compileJUnitTestCasesLocally("javac", dependancy1, filePath, workingPath);
+		System.out.println("workingPath:\t" + filePath);
 		TestCommandHelp.runJUnitTestCasesLocally(dependancy1, classname, workingPath);
 		String[] dependancy2 = {
 				"./lib2/*",
