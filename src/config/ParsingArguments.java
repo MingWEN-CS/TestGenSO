@@ -7,6 +7,7 @@ public class ParsingArguments {
 		String pro = config.Config.targetLib;
 		int begin = config.Config.seedBegin;
 		int end = config.Config.seedEnd;
+		boolean isFix = config.Config.isFix;
 		String option = config.Config.option;
 		
 		if (args.length == 0) {
@@ -26,6 +27,8 @@ public class ParsingArguments {
 				if (args[i].equals("-o")) {
 					option = args[++i];
 				}
+				if (args[i].equals("-fix"))
+					isFix = true;
 				i++;
 			}			
 		}
@@ -36,6 +39,7 @@ public class ParsingArguments {
 			config.Config.option = option;
 		config.Config.seedBegin = begin;
 		config.Config.seedEnd = end;
+		config.Config.isFix = isFix;
 //		if (pro.equals("Ant") || pro.equals("ElasticSearch") || pro.equals("Lucene")) global.Parameters.VERSION = "";
 	}
 	

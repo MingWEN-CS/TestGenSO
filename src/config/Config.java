@@ -11,6 +11,7 @@ public class Config {
 	public static int evosuiteTimeLimit = 30;
 	public static int seedBegin = 0;
 	public static int seedEnd = 1;
+	public static boolean isFix = false;
 	public static final String targetLibraryDir = "../TargetLibraries";
 	
 	public static HashMap<String,String> libToPackage = new HashMap<String,String>();

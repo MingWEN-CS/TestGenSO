@@ -372,13 +372,27 @@ public class EvaluateTestCases {
 	}
 	
 	public void fixEvosuiteInvalidTestCases() {
-		String logFile = "./log2/evaluateEvosuite.seed.0.commons.lang3";
-		String errorPattern = "o.e.r.c.ClassStateSupport";
-		List<String> buggyClasses = GetValidTestCasesFromLog.getErrorList(logFile, errorPattern);
+
 		ExecutorService executor = Executors.newFixedThreadPool(10);
-		for (String buggyClass : buggyClasses) {
-			Runnable work = new fixEvosuiteInvalidTestCase(buggyClass, 0);
-			executor.execute(work);
+		String targetLibrary = config.Config.targetLib;
+		String prefix = config.Config.targetLibraryDir + File.separator + targetLibrary;
+		String testCasePrefix = prefix + File.separator + "evosuite-tests";
+		int timeLimit = config.Config.evosuiteTimeLimit;
+		int seedBegin = config.Config.seedBegin;
+		int seedEnd = config.Config.seedEnd;
+		
+		for (int seed = seedBegin; seed <= seedEnd; seed++) {
+			String invalidFolder = testCasePrefix + File.separator + "invalid-" + timeLimit + "-" + seed;
+			File[] files = new File(invalidFolder).listFiles();
+			HashSet<String> buggyClasses = new HashSet<String>();
+			for (File file : files) {
+				buggyClasses.add(file.getName().substring(0, file.getName().indexOf("_")));
+			}
+			System.out.println(buggyClasses.toString());
+			for (String buggyClass : buggyClasses) {
+				Runnable work = new fixEvosuiteInvalidTestCase(buggyClass, 0);
+				executor.execute(work);
+			}
 		}
 		executor.shutdown();
 	}
@@ -392,7 +406,10 @@ public class EvaluateTestCases {
 		
 		if (option.equals("Evosuite")) {
 //			etc.getEvosuiteCoverage();
-			etc.getEvosuiteCoverage();
+			if (config.Config.isFix)
+				etc.fixEvosuiteInvalidTestCases();
+			else
+				etc.getEvosuiteCoverage();
 		} else if (option.equals("Randoop"))
 			etc.getRandoopCoverage();
 		else if (option.equals("TestSO"))
