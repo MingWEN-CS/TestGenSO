@@ -370,7 +370,7 @@ public class EvaluateTestCases {
 		
 		while (nums.size() > 0) {
 			System.out.println("Failures at :" + nums.toString());
-			removeInvalidTestCases(workingPath + filePath, nums);
+			removeInvalidTestCases(workingPath + File.separator + filePath, nums);
 			TestCommandHelp.compileJUnitTestCasesLocally("javac", dependancy1, filePath, workingPath);
 			results = TestCommandHelp.runJUnitTestCasesLocally(dependancy2, classname, workingPath);
 			System.out.println(results.getKey());
