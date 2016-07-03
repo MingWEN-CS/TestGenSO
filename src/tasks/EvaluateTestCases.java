@@ -403,10 +403,11 @@ public class EvaluateTestCases {
 //		String content = FileToLines.fileToString("./runResults.txt");
 //		etc.getRunningErrors(content, "com.google.common.base.Joiner_ESTest");
 		String option = config.Config.option;
-		
+		boolean isFix = config.Config.isFix;
+		System.out.println("Option:" + option + "\t" + "isFix:" + isFix);
 		if (option.equals("Evosuite")) {
 //			etc.getEvosuiteCoverage();
-			if (config.Config.isFix)
+			if (isFix)
 				etc.fixEvosuiteInvalidTestCases();
 			else
 				etc.getEvosuiteCoverage();
