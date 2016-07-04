@@ -155,96 +155,103 @@ public class AnalyzeResults {
 		HashSet<String> classnames = new HashSet<String>();
 		
 		HashSet<String> evosuite = new HashSet<String>();
-		List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, "index.html");
-		for (String report : reports) {
-			String packagename = report.replace("\\", ".");
-			packagename = packagename.replace("/", ".");
-			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
-			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
-			HashSet<String> tmp = getNoCoveragePackage(report);
-//			System.out.println(packagename);
-			for (String tmp1 : tmp) {
-				evosuite.add(packagename + tmp1); 
-			}
-		}
 		
-		System.out.println("Evosuite Size:\t" + evosuite.size());
-		System.out.println("Adding other test cases...");
-		File[] files = new File(evosuiteDir).listFiles();
-		System.out.println("Invalid Test Cases Length\t" + files.length);
-		
-		HashSet<String> nonEmpty = new HashSet<String>();
-		for (File file : files) {
-			if (!file.getName().endsWith("_ESTest")) continue;
-//			System.out.println(file.getName());
-			reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), "index.html");
-			HashSet<String> fullnames = new HashSet<String>();
+		if (isEvosuite) {
+			List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, "index.html");
 			for (String report : reports) {
-				
-//				System.out.println(report);
-				String reportDate = report.substring(report.indexOf("_ESTest") + 8);
-				reportDate = reportDate.replace("\\", ".");
-				reportDate = reportDate.replace("/", ".");
-				if (!reportDate.contains(config.Config.libToPackage.get(targetLibrary))) continue;
-				reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
-//				System.out.println(reportDate);
-//				if (report.contains("com.google.common.base")) continue;
-//				System.out.println(report + "\t" + report.indexOf(reportDir));
-//				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
 				String packagename = report.replace("\\", ".");
 				packagename = packagename.replace("/", ".");
-				packagename = packagename.substring(packagename.indexOf(reportDate) + reportDate.length());
-//				System.out.println(packagename);
 				if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
 				packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
-//				System.out.println(packagename);
-				HashSet<String> names = getNoCoveragePackage(report);
-				for (String name : names) fullnames.add(packagename + name); 
+				HashSet<String> tmp = getNoCoveragePackage(report);
+	//			System.out.println(packagename);
+				for (String tmp1 : tmp) {
+					evosuite.add(packagename + tmp1); 
+				}
 			}
 			
-//			System.out.println(fullnames.toString());
-			for (String empty : evosuite) {
-				if (!fullnames.contains(empty))
-					nonEmpty.add(empty);
+			System.out.println("Evosuite Size:\t" + evosuite.size());
+			System.out.println("Adding other test cases...");
+			File[] files = new File(evosuiteDir).listFiles();
+			System.out.println("Invalid Test Cases Length\t" + files.length);
+			
+			HashSet<String> nonEmpty = new HashSet<String>();
+			for (File file : files) {
+				if (!file.getName().endsWith("_ESTest")) continue;
+	//			System.out.println(file.getName());
+				reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), "index.html");
+				HashSet<String> fullnames = new HashSet<String>();
+				for (String report : reports) {
+					
+	//				System.out.println(report);
+					String reportDate = report.substring(report.indexOf("_ESTest") + 8);
+					reportDate = reportDate.replace("\\", ".");
+					reportDate = reportDate.replace("/", ".");
+					if (!reportDate.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+					reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
+	//				System.out.println(reportDate);
+	//				if (report.contains("com.google.common.base")) continue;
+	//				System.out.println(report + "\t" + report.indexOf(reportDir));
+	//				String classname = report.substring(report.indexOf(reportDate) + reportDate.length() + 1);
+					String packagename = report.replace("\\", ".");
+					packagename = packagename.replace("/", ".");
+					packagename = packagename.substring(packagename.indexOf(reportDate) + reportDate.length());
+	//				System.out.println(packagename);
+					if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+					packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+	//				System.out.println(packagename);
+					HashSet<String> names = getNoCoveragePackage(report);
+					for (String name : names) fullnames.add(packagename + name); 
+				}
+				
+	//			System.out.println(fullnames.toString());
+				for (String empty : evosuite) {
+					if (!fullnames.contains(empty))
+						nonEmpty.add(empty);
+				}
 			}
+			
+			evosuite.removeAll(nonEmpty);
 		}
-		
-		evosuite.removeAll(nonEmpty);
 		
 		System.out.println("Evosuite Size:\t" + evosuite.size());
 		
+		
 		HashSet<String> randoop = new HashSet<String>();
-		reports = FileListUnderDirectory.getFileListUnder(randoopDir + File.separator + randoopDate, "index.html");
-		for (String report : reports) {
-			String packagename = report.replace("\\", ".");
-			packagename = packagename.replace("/", ".");
-			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
-			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
-			HashSet<String> tmp = getNoCoveragePackage(report);
-//			System.out.println(packagename);
-			for (String tmp1 : tmp) {
-				randoop.add(packagename + tmp1); 
+		if (isRandoop) {
+			List<String> reports = FileListUnderDirectory.getFileListUnder(randoopDir + File.separator + randoopDate, "index.html");
+			for (String report : reports) {
+				String packagename = report.replace("\\", ".");
+				packagename = packagename.replace("/", ".");
+				if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+				packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+				HashSet<String> tmp = getNoCoveragePackage(report);
+	//			System.out.println(packagename);
+				for (String tmp1 : tmp) {
+					randoop.add(packagename + tmp1); 
+				}
 			}
+	
+			System.out.println("Randoop Size:\t" + randoop.size());
 		}
-
-		System.out.println("Randoop Size:\t" + randoop.size());
-		
 		HashSet<String> testSO = new HashSet<String>();
-		reports = FileListUnderDirectory.getFileListUnder(testSODir, "index.html");
-		for (String report : reports) {
-			String packagename = report.replace("\\", ".");
-			packagename = packagename.replace("/", ".");
-			if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
-			packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
-			HashSet<String> tmp = getNoCoveragePackage(report);
-//			System.out.println(packagename);
-			for (String tmp1 : tmp) {
-				testSO.add(packagename + tmp1); 
+		
+		if (isTestSO) {
+			List<String> reports = FileListUnderDirectory.getFileListUnder(testSODir, "index.html");
+			for (String report : reports) {
+				String packagename = report.replace("\\", ".");
+				packagename = packagename.replace("/", ".");
+				if (!packagename.contains(config.Config.libToPackage.get(targetLibrary))) continue;
+				packagename = packagename.substring(packagename.indexOf(config.Config.libToPackage.get(targetLibrary)), packagename.length() - 10);
+				HashSet<String> tmp = getNoCoveragePackage(report);
+	//			System.out.println(packagename);
+				for (String tmp1 : tmp) {
+					testSO.add(packagename + tmp1); 
+				}
 			}
+			
+			System.out.println("TestSO size:\t" + testSO.size());
 		}
-		
-		System.out.println("TestSO size:\t" + testSO.size());
-		
 		System.out.println(evosuite.toString());
 		System.out.println(randoop.toString());
 		System.out.println(testSO.toString());
