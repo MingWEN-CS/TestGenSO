@@ -178,19 +178,19 @@ public class AnalyzeResults {
 			HashSet<String> nonEmpty = new HashSet<String>();
 			for (File file : files) {
 				if (!(file.getName().endsWith("_ESTest") || file.getName().contains(config.Config.libToPackage.get(targetLibrary)))) continue;
-				System.out.println(file.getName());
+//				System.out.println(file.getName());
 				reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), "index.html");
 				HashSet<String> fullnames = new HashSet<String>();
 				for (String report : reports) {
 					
-					System.out.println(report);
+//					System.out.println(report);
 					String reportDate = "";
 					if (file.getName().endsWith("_ESTest"))
 						reportDate = report.substring(report.indexOf("_ESTest") + 8);
 					reportDate = reportDate.replace("\\", ".");
 					reportDate = reportDate.replace("/", ".");
-					System.out.println(reportDate);
-					System.out.println(config.Config.libToPackage.get(targetLibrary));
+//					System.out.println(reportDate);
+//					System.out.println(config.Config.libToPackage.get(targetLibrary));
 					if (!reportDate.contains(config.Config.libToPackage.get(targetLibrary))) continue;
 					reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
 	//				System.out.println(reportDate);
