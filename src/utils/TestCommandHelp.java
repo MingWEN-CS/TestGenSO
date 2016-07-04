@@ -56,6 +56,8 @@ public class TestCommandHelp {
 				reportDir,
 				"--sourceDirs",
 				sourceDir,
+				"--threads",
+				"10",
 				"--excludedClasses",
 				excludeClasses.equals("") ? "CIVI_UNMATCH_FORMAT" : excludeClasses, 
 				"--targetClasses",
