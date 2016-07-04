@@ -177,16 +177,20 @@ public class AnalyzeResults {
 			
 			HashSet<String> nonEmpty = new HashSet<String>();
 			for (File file : files) {
-				if (!file.getName().endsWith("_ESTest")) continue;
-	//			System.out.println(file.getName());
+				if (!(file.getName().endsWith("_ESTest") || file.getName().contains(config.Config.libToPackage.get(targetLibrary)))) continue;
+				System.out.println(file.getName());
 				reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), "index.html");
 				HashSet<String> fullnames = new HashSet<String>();
 				for (String report : reports) {
 					
-	//				System.out.println(report);
-					String reportDate = report.substring(report.indexOf("_ESTest") + 8);
+					System.out.println(report);
+					String reportDate = "";
+					if (file.getName().endsWith("_ESTest"))
+						reportDate = report.substring(report.indexOf("_ESTest") + 8);
 					reportDate = reportDate.replace("\\", ".");
 					reportDate = reportDate.replace("/", ".");
+					System.out.println(reportDate);
+					System.out.println(config.Config.libToPackage.get(targetLibrary));
 					if (!reportDate.contains(config.Config.libToPackage.get(targetLibrary))) continue;
 					reportDate = reportDate.substring(0, reportDate.indexOf(config.Config.libToPackage.get(targetLibrary)) - 1);
 	//				System.out.println(reportDate);
@@ -291,7 +295,7 @@ public class AnalyzeResults {
 			File[] files = new File(evosuiteDir).listFiles();
 			System.out.println("Invalid Test Cases Length\t" + files.length);
 			for (File file : files) {
-				if (!file.getName().endsWith("_ESTest")) continue;
+				if (!(file.getName().endsWith("_ESTest") || file.getName().contains(config.Config.libToPackage.get(targetLibrary)))) continue;
 	//			System.out.println(file.getName());
 				reports = FileListUnderDirectory.getFileListUnder(file.getAbsolutePath(), ".html");
 				MutantPerProject testClass = new MutantPerProject();

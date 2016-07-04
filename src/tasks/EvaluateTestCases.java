@@ -525,7 +525,7 @@ class fixEvosuiteInvalidTestCase implements Runnable {
 			nums = EvaluateTestCases.getRunningErrors(result.getKey(), classname);
 		}
 		
-		String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass;
+		String reportDir = reportDirPrefix + File.separator + "report-" + seed + File.separator + buggyClass + "_ESTest";
 		TestCommandHelp.generatePiTestMutationTest("java", dependancies2, reportDir, "", excludedClasses, targetClasses, buggyClass, workingPath);
 	}
 }
