@@ -268,12 +268,13 @@ public class AnalyzeResults {
 	}
 	
 	public void compareMutationScore() {		
-		System.out.println(evosuiteDir + File.separator + evosuiteDate);
-		List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
+
 		MutantPerProject evosuite = new MutantPerProject();
 		HashSet<String> noCoverageClasses = getNoCoverageClass();
 		
 		if (isEvosuite) {
+			System.out.println(evosuiteDir + File.separator + evosuiteDate);
+			List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
 			System.out.println("Getting Evosuite Results...");
 //			System.out.println(reportDir);
 			
