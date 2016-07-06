@@ -271,10 +271,10 @@ public class AnalyzeResults {
 
 		MutantPerProject evosuite = new MutantPerProject();
 		HashSet<String> noCoverageClasses = getNoCoverageClass();
-		
+		List<String> reports = null;
 		if (isEvosuite) {
 			System.out.println(evosuiteDir + File.separator + evosuiteDate);
-			List<String> reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
+			reports = FileListUnderDirectory.getFileListUnder(evosuiteDir + File.separator + evosuiteDate, ".html");
 			System.out.println("Getting Evosuite Results...");
 //			System.out.println(reportDir);
 			
