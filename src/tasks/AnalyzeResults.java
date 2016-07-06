@@ -63,6 +63,7 @@ public class AnalyzeResults {
 		
 		if (tmp.length == 2 && tmp[0].equals("TestSO")) {
 			testSODate = tmp[1];
+			testSODir = testSODirPrefix + File.separator + testSODate;
 			isTestSO = true;
 		}
 	}
