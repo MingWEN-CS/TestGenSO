@@ -61,7 +61,7 @@ public class TestCommandHelp {
 				"--timeoutFactor",
 				"2",
 				"--timeoutConst",
-				"6000",
+				"10000",
 				"--excludedClasses",
 				excludeClasses.equals("") ? "CIVI_UNMATCH_FORMAT" : excludeClasses, 
 				"--targetClasses",
